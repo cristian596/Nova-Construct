@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-pt-20 bg-white text-graphite antialiased;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      @apply scroll-smooth;
+    }
+  }
+
+  body {
+    @apply ancho-normal font-sans;
+  }
+
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-safety;
+  }
+}

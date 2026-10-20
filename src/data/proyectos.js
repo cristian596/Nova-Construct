@@ -1,0 +1,51 @@
+// TODO: reemplazar por proyectos reales. Imágenes en proporción 4:5 (mínimo 800×1000 px).
+export const PROYECTOS = [
+  {
+    nombre: 'Apartamento Chicó',
+    tipo: 'Remodelación',
+    m2: 86,
+    semanas: 10,
+    imagen: '/placeholders/proyecto-planta.svg',
+    alt: 'Plano de planta del apartamento Chicó con la nueva distribución de cocina abierta',
+  },
+  {
+    nombre: 'Casa Llanogrande',
+    tipo: 'Obra nueva',
+    m2: 240,
+    semanas: 36,
+    imagen: '/placeholders/proyecto-fachada.svg',
+    alt: 'Fachada de la casa Llanogrande, dos pisos con ventanería amplia',
+  },
+  {
+    nombre: 'Oficina Cra. 11',
+    tipo: 'Acabados',
+    m2: 140,
+    semanas: 6,
+    imagen: '/placeholders/proyecto-interior.svg',
+    alt: 'Interior de la oficina con piso en porcelanato y ventana de piso a techo',
+  },
+  {
+    nombre: 'Local Laureles',
+    tipo: 'Arquitectura',
+    m2: 65,
+    semanas: 4,
+    imagen: '/placeholders/proyecto-planta.svg',
+    alt: 'Planta arquitectónica del local Laureles con baño y bodega',
+  },
+  {
+    nombre: 'Casa El Peñón',
+    tipo: 'Remodelación',
+    m2: 180,
+    semanas: 16,
+    imagen: '/placeholders/proyecto-interior.svg',
+    alt: 'Sala de la casa El Peñón después de la remodelación',
+  },
+  {
+    nombre: 'Edificio Cedritos',
+    tipo: 'Obra nueva',
+    m2: 300,
+    semanas: 44,
+    imagen: '/placeholders/proyecto-fachada.svg',
+    alt: 'Fachada terminada del edificio Cedritos de cuatro pisos',
+  },
+]
