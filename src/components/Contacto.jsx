@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { CONTACTO, enlaceWhatsApp } from '../data/contacto.js'
 import { TIPOS } from '../data/cotizador.js'
+import { MARCA } from '../data/marca.js'
 import { botonPrimario, contenedor, tituloSeccion } from '../lib/ui.js'
 
 const CAMPOS = ['nombre', 'telefono', 'tipo', 'mensaje']
@@ -77,7 +78,7 @@ export default function Contacto() {
     const tipo = TIPOS.find((opcion) => opcion.id === valores.tipo).nombre
 
     if (!CONTACTO.formularioEndpoint) {
-      const texto = `Hola, NOVA CONSTRUCT. Soy ${valores.nombre.trim()} (${valores.telefono.trim()}).\nProyecto: ${tipo}\n\n${valores.mensaje.trim()}`
+      const texto = `Hola, ${MARCA.nombre}. Soy ${valores.nombre.trim()} (${valores.telefono.trim()}).\nProyecto: ${tipo}\n\n${valores.mensaje.trim()}`
       window.open(enlaceWhatsApp(texto), '_blank', 'noopener,noreferrer')
       setEstado('whatsapp')
       return
@@ -167,19 +168,19 @@ export default function Contacto() {
           <dl className="mt-14 grid gap-6 border-t-2 border-graphite pt-8 sm:grid-cols-3">
             <div>
               <dt className="text-sm">Dirección</dt>
-              <dd className="mt-1 font-semibold">{CONTACTO.direccion}</dd>
+              <dd className="mt-1 font-semibold">{MARCA.direccion}, {MARCA.ciudad}</dd>
             </div>
             <div>
               <dt className="text-sm">Teléfono</dt>
               <dd className="mt-1 font-semibold">
                 <a href={`tel:${CONTACTO.telefonoHref}`} className="-my-3 inline-block py-3 underline underline-offset-4">
-                  {CONTACTO.telefono}
+                  {MARCA.telefono}
                 </a>
               </dd>
             </div>
             <div>
               <dt className="text-sm">Horario</dt>
-              <dd className="mt-1 font-semibold">{CONTACTO.horario}</dd>
+              <dd className="mt-1 font-semibold">{MARCA.horario}</dd>
             </div>
           </dl>
           <a

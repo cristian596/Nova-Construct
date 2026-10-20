@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { PROYECTOS } from '../data/proyectos.js'
 import { contenedor, tituloSeccion } from '../lib/ui.js'
 import Cota from './Cota.jsx'
@@ -23,6 +23,27 @@ function BotonDesplazar({ direccion, onClick }) {
         <path d={anterior ? 'M17 10H4M9 5l-5 5 5 5' : 'M3 10h13M11 5l5 5-5 5'} />
       </svg>
     </button>
+  )
+}
+
+// Marco 4:5 que se conserva aunque la imagen falle: queda el fondo cement y la leyenda de abajo.
+function ImagenProyecto({ src, alt }) {
+  const [fallo, setFallo] = useState(false)
+
+  return (
+    <div className="aspect-[4/5] w-full bg-cement" {...(fallo && { role: 'img', 'aria-label': alt })}>
+      {!fallo && (
+        <img
+          src={src}
+          alt={alt}
+          width="960"
+          height="1200"
+          loading="lazy"
+          onError={() => setFallo(true)}
+          className="size-full object-cover"
+        />
+      )}
+    </div>
   )
 }
 
@@ -69,15 +90,10 @@ export default function Proyectos() {
           {PROYECTOS.map((proyecto) => (
             <li key={proyecto.nombre} className="w-[min(78vw,20rem)] shrink-0 snap-start lg:w-[19.5rem]">
               <figure>
-                <img
-                  src={proyecto.imagen}
-                  alt={proyecto.alt}
-                  width="800"
-                  height="1000"
-                  loading="lazy"
-                  className="aspect-[4/5] w-full bg-cement object-cover"
-                />
-                <figcaption className="mt-4 border-t border-graphite pt-4">
+                <ImagenProyecto src={proyecto.imagen} alt={proyecto.alt} />
+                {/* graphite y no cement: cement sobre concrete da 2,8:1 y no cumple AA. */}
+                <p className="mt-2 text-xs text-graphite">Ilustración de ejemplo</p>
+                <figcaption className="mt-3 border-t border-graphite pt-4">
                   <h3 className="ancho-semi text-2xl font-bold leading-tight">{proyecto.nombre}</h3>
                   <dl className="mt-3 flex flex-wrap gap-x-6 gap-y-3 text-sm">
                     <div>

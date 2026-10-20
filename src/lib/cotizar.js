@@ -1,4 +1,5 @@
 import { ACABADOS, CIUDADES, M2, RANGO, REDONDEO, TIPOS } from '../data/cotizador.js'
+import { MARCA } from '../data/marca.js'
 
 const buscar = (lista, id) => lista.find((item) => item.id === id)
 
@@ -51,7 +52,7 @@ export const formatearCOP = (valor) => cop.format(valor)
 
 export function mensajeWhatsApp(rango) {
   return [
-    'Hola, NOVA CONSTRUCT. Quiero avanzar con esta cotización preliminar:',
+    `Hola, ${MARCA.nombre}. Quiero avanzar con esta cotización preliminar:`,
     `• Proyecto: ${rango.tipo.nombre}`,
     `• Área: ${rango.m2} m²`,
     `• Acabados: ${rango.acabados.nombre}`,

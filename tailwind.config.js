@@ -1,32 +1,49 @@
 import plugin from 'tailwindcss/plugin'
+import { MARCA } from './src/data/marca.js'
 
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
-    // Paleta cerrada: solo estos tokens existen como colores.
+    // Paleta cerrada: solo estos tokens existen como colores. Los valores viven en src/data/marca.js.
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
-      white: '#FFFFFF',
-      concrete: '#ECECEA',
-      graphite: '#2A2C2E',
-      cement: '#8B8F94',
-      safety: '#FF6A13',
+      ...MARCA.colores,
     },
     extend: {
       fontFamily: {
         sans: ['Archivo', 'system-ui', 'sans-serif'],
       },
+      // Solo definen el estado inicial (from): el final es el estilo base del elemento,
+      // así con prefers-reduced-motion (animate-none) todo queda en su posición final.
       keyframes: {
+        // La línea sube desde debajo de su máscara (overflow-hidden).
         revelar: {
-          from: { opacity: '0', transform: 'translateY(0.35em)' },
-          to: { opacity: '1', transform: 'translateY(0)' },
+          from: { transform: 'translate3d(0, 125%, 0)' },
+        },
+        trazar: {
+          from: { transform: 'scaleX(0)' },
+        },
+        aparecer: {
+          from: { opacity: '0' },
+        },
+        'zoom-lento': {
+          from: { transform: 'scale3d(1.08, 1.08, 1)' },
+        },
+        // Línea naranja que entra por arriba, cruza la pista y sale por abajo.
+        indicador: {
+          '0%': { transform: 'translate3d(0, -100%, 0)' },
+          '50%': { transform: 'translate3d(0, 0, 0)' },
+          '100%': { transform: 'translate3d(0, 100%, 0)' },
         },
       },
       animation: {
-        // 400 ms + 200 ms de retraso máximo = 600 ms en total.
-        revelar: 'revelar 400ms cubic-bezier(0.2, 0.7, 0.2, 1) both',
+        revelar: 'revelar 800ms cubic-bezier(0.16, 1, 0.3, 1) both',
+        trazar: 'trazar 450ms cubic-bezier(0.65, 0, 0.35, 1) both',
+        aparecer: 'aparecer 300ms ease-out both',
+        'zoom-lento': 'zoom-lento 8s cubic-bezier(0.22, 0.61, 0.36, 1) both',
+        indicador: 'indicador 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite',
       },
     },
   },

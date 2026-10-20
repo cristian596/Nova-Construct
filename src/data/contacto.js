@@ -1,20 +1,15 @@
-// TODO: reemplazar todos los valores por los datos reales de la empresa.
+import { MARCA } from './marca.js'
+
+// Solo lo específico del contacto. Teléfono, dirección y horario viven en marca.js.
 export const CONTACTO = {
-  // TODO: número de WhatsApp en formato internacional, solo dígitos (57 + número).
-  whatsapp: '570000000000',
-  // TODO: teléfono visible y su versión para el enlace tel:.
-  telefono: 'TODO: +57 000 000 0000',
-  telefonoHref: '+570000000000',
-  // TODO: dirección de la oficina.
-  direccion: 'TODO: dirección, ciudad',
-  // TODO: horario de atención.
-  horario: 'TODO: lunes a viernes, 0:00 a 0:00',
   // TODO: endpoint del formulario (Formspree, backend propio, etc.).
   // Si queda vacío, el formulario abre WhatsApp con el mensaje.
   formularioEndpoint: '',
+  // Valor del enlace tel:, derivado del número de WhatsApp.
+  telefonoHref: `+${MARCA.telefonoWhatsapp}`,
 }
 
 export function enlaceWhatsApp(texto) {
-  const base = `https://wa.me/${CONTACTO.whatsapp}`
+  const base = `https://wa.me/${MARCA.telefonoWhatsapp}`
   return texto ? `${base}?text=${encodeURIComponent(texto)}` : base
 }

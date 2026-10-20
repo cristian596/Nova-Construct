@@ -1,18 +1,11 @@
-import { useState } from 'react'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Header from './components/Header.jsx'
-import Hero from './components/Hero.jsx'
-import Servicios from './components/Servicios.jsx'
-import Cotizador from './components/Cotizador.jsx'
-import Proyectos from './components/Proyectos.jsx'
-import Proceso from './components/Proceso.jsx'
-import Garantias from './components/Garantias.jsx'
-import Contacto from './components/Contacto.jsx'
 import Footer from './components/Footer.jsx'
+import Inicio from './pages/Inicio.jsx'
+import AvisoPrivacidad from './pages/AvisoPrivacidad.jsx'
+import { RUTA_AVISO } from './lib/aviso.js'
 
 export default function App() {
-  // El tipo vive aquí para que "Cotizar" en Servicios lo preseleccione.
-  const [tipo, setTipo] = useState('')
-
   return (
     <>
       <a
@@ -22,15 +15,11 @@ export default function App() {
         Saltar al contenido
       </a>
       <Header />
-      <main id="contenido">
-        <Hero />
-        <Servicios onCotizar={setTipo} />
-        <Cotizador tipo={tipo} onTipoChange={setTipo} />
-        <Proyectos />
-        <Proceso />
-        <Garantias />
-        <Contacto />
-      </main>
+      <Routes>
+        <Route path="/" element={<Inicio />} />
+        <Route path={RUTA_AVISO} element={<AvisoPrivacidad />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
       <Footer />
     </>
   )

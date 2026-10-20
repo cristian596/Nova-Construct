@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { MARCA } from '../data/marca.js'
 import { SECCIONES } from '../data/secciones.js'
 import { botonPrimario, contenedor } from '../lib/ui.js'
 import Logo from './Logo.jsx'
@@ -6,6 +8,8 @@ import Logo from './Logo.jsx'
 export default function Header() {
   const [abierto, setAbierto] = useState(false)
   const botonRef = useRef(null)
+  // Fuera de la landing, los enlaces a secciones deben llevar de vuelta a ella.
+  const raiz = useLocation().pathname === '/' ? '' : '/'
 
   useEffect(() => {
     if (!abierto) return
@@ -24,7 +28,7 @@ export default function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-cement bg-white">
       <div className={`${contenedor} flex h-16 items-center justify-between gap-6`}>
-        <a href="#inicio" className="flex min-h-11 items-center" aria-label="NOVA CONSTRUCT, ir al inicio">
+        <a href={`${raiz}#inicio`}className="flex min-h-11 items-center" aria-label={`${MARCA.nombre}, ir al inicio`}>
           <Logo />
         </a>
 
@@ -33,7 +37,7 @@ export default function Header() {
             {SECCIONES.map((seccion) => (
               <li key={seccion.id}>
                 <a
-                  href={`#${seccion.id}`}
+                  href={`${raiz}#${seccion.id}`}
                   className="flex min-h-11 items-center px-3 text-[0.9375rem] font-medium underline-offset-[6px] hover:underline"
                 >
                   {seccion.nombre}
@@ -44,7 +48,7 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <a href="#cotizador" className={`${botonPrimario} hidden min-h-11 py-2 sm:inline-flex`}>
+          <a href={`${raiz}#cotizador`} className={`${botonPrimario} hidden min-h-11 py-2 sm:inline-flex`}>
             Cotizar proyecto
           </a>
           <button
@@ -71,14 +75,14 @@ export default function Header() {
         <ul className={`${contenedor} py-2`}>
           {SECCIONES.map((seccion) => (
             <li key={seccion.id} className="border-b border-concrete last:border-b-0">
-              <a href={`#${seccion.id}`} onClick={cerrar} className="flex min-h-12 items-center text-lg font-medium">
+              <a href={`${raiz}#${seccion.id}`} onClick={cerrar} className="flex min-h-12 items-center text-lg font-medium">
                 {seccion.nombre}
               </a>
             </li>
           ))}
         </ul>
         <div className={`${contenedor} pb-5 sm:hidden`}>
-          <a href="#cotizador" onClick={cerrar} className={`${botonPrimario} w-full`}>
+          <a href={`${raiz}#cotizador`} onClick={cerrar} className={`${botonPrimario} w-full`}>
             Cotizar proyecto
           </a>
         </div>
