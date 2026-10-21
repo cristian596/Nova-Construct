@@ -343,10 +343,10 @@ Para aparecer en Google Maps y en búsquedas locales, crea además un perfil gra
 3. **Algún cambio no aparece.** Detén `npm run dev` con `Ctrl + C`, vuelve a ejecutarlo y recarga la página con `Ctrl + F5`.
 4. **Un comando no funciona.** Verifica `node -v` (mínimo 20.19) y que estás dentro de la carpeta del proyecto.
 
-**Contacto del desarrollador:**
-
-- Nombre: ______________________
-- Correo: ______________________
-- Teléfono / WhatsApp: ______________________
-
 **Próximos pasos sugeridos:** agregar tus fotos reales, conectar el formulario a un endpoint, hacer revisar el aviso de privacidad por un abogado, abrir el perfil de Google Business y medir visitas con una herramienta de analítica de tu preferencia.
+
+---
+
+## Licencia
+
+El uso de este proyecto/código fuente está sujeto a los términos expresados en el archivo LICENSE.md adjunto.
