@@ -1,9 +1,11 @@
+import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Header from './components/Header.jsx'
 import Footer from './components/Footer.jsx'
 import Inicio from './pages/Inicio.jsx'
-import AvisoPrivacidad from './pages/AvisoPrivacidad.jsx'
 import { RUTA_AVISO } from './lib/aviso.js'
+
+const AvisoPrivacidad = lazy(() => import('./pages/AvisoPrivacidad.jsx'))
 
 export default function App() {
   return (
@@ -17,7 +19,14 @@ export default function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Inicio />} />
-        <Route path={RUTA_AVISO} element={<AvisoPrivacidad />} />
+        <Route
+          path={RUTA_AVISO}
+          element={
+            <Suspense fallback={<div className="min-h-screen" />}>
+              <AvisoPrivacidad />
+            </Suspense>
+          }
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Footer />

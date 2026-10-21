@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { PROYECTOS } from '../data/proyectos.js'
+import { ANCHOS_PROYECTO, PROYECTOS } from '../data/proyectos.js'
 import { contenedor, tituloSeccion } from '../lib/ui.js'
 import Cota from './Cota.jsx'
+import ImagenResponsiva from './ImagenResponsiva.jsx'
 
 // Mismo margen que `contenedor` (max-w-7xl centrado), aplicado al carril con scroll
 // para que el primer proyecto quede alineado con el título. En escritorio (lg) el carril
@@ -50,8 +51,10 @@ function ImagenProyecto({ src, alt, tipo, m2, semanas, activo, pausado }) {
       {...(fallo && { role: 'img', 'aria-label': alt })}
     >
       {!fallo && (
-        <img
+        <ImagenResponsiva
           src={src}
+          anchos={ANCHOS_PROYECTO}
+          sizes="(min-width: 1024px) 22rem, min(78vw, 20rem)"
           alt={alt}
           width="960"
           height="1200"

@@ -1,6 +1,9 @@
 // TODO: reemplazar por proyectos reales. Las imágenes actuales son ilustraciones de ejemplo
 // (la galería muestra la leyenda "Ilustración de ejemplo" bajo cada una).
 // Imágenes en public/projects/, proporción 4:5 (mínimo 800×1000 px).
+// Anchos generados por `npm run imagenes` (originales de 960 px: no se amplían).
+export const ANCHOS_PROYECTO = [480, 960]
+
 export const PROYECTOS = [
   {
     nombre: 'Apartamento Chicó',

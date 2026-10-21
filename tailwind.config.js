@@ -13,7 +13,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Archivo', 'system-ui', 'sans-serif'],
+        sans: ['Archivo Variable', 'system-ui', 'sans-serif'],
       },
       // Solo definen el estado inicial (from): el final es el estilo base del elemento,
       // así con prefers-reduced-motion (animate-none) todo queda en su posición final.

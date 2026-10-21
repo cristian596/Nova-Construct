@@ -59,11 +59,15 @@
       }
     </script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Imagen del hero (LCP): mismos srcset y sizes que Hero.jsx. Si cambias la foto, actualízalo. -->
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap"
+      rel="preload"
+      as="image"
+      type="image/avif"
+      href="/placeholders/hero-960.avif"
+      imagesrcset="/placeholders/hero-480.avif 480w, /placeholders/hero-960.avif 960w, /placeholders/hero-1440.avif 1440w"
+      imagesizes="100vw"
+      fetchpriority="high"
     />
   </head>
   <body>

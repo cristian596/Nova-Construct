@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { PROYECTOS } from '../data/proyectos.js'
+import { ANCHOS_PROYECTO, PROYECTOS } from '../data/proyectos.js'
+import ImagenResponsiva from './ImagenResponsiva.jsx'
 
 const dosDigitos = (n) => String(n).padStart(2, '0')
 const TOTAL = dosDigitos(PROYECTOS.length)
@@ -67,9 +68,11 @@ export default function TarjetaProyecto() {
       <a href="#proyectos" aria-label={`Ver proyectos. Proyecto actual: ${proyecto.nombre}`} className={`group block rounded-lg ${foco}`}>
         <div className="relative aspect-[16/10] overflow-hidden rounded-md bg-cement">
           {!fallo && (
-            <img
+            <ImagenResponsiva
               key={proyecto.imagen}
               src={proyecto.imagen}
+              anchos={ANCHOS_PROYECTO}
+              sizes="17rem"
               alt=""
               width="960"
               height="1200"

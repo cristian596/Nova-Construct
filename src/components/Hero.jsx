@@ -2,12 +2,15 @@ import { useEffect, useRef } from 'react'
 import { MARCA, esPendiente } from '../data/marca.js'
 import { contenedor } from '../lib/ui.js'
 import TarjetaProyecto from './TarjetaProyecto.jsx'
+import ImagenResponsiva from './ImagenResponsiva.jsx'
 
 // Cifras del pie del hero: se omiten las pendientes y con menos de dos se oculta la fila.
 const CIFRAS = MARCA.datosConfianza.filter((dato) => !esPendiente(dato.valor))
 
 // TODO: reemplazar por una foto real de obra (mínimo 2400 px de ancho; ésta mide 1456 × 816 y se ve blanda al ampliarse).
 const IMAGEN_HERO = '/placeholders/hero.webp'
+// Anchos generados por `npm run imagenes` (no se amplía el original). Si cambias la foto, actualiza también el preload de index.html.
+const ANCHOS_HERO = [480, 960, 1440]
 
 // Una línea por fila: cada una sube desde su propia máscara.
 const TITULAR = ['Remodelamos,', 'terminamos', 'y entregamos', 'en plazo.']
@@ -142,8 +145,10 @@ export default function Hero() {
         className="relative isolate flex min-h-[max(36rem,min(calc(100svh-4rem),56rem))] w-full items-end overflow-hidden rounded-2xl shadow-[0_16px_40px_rgb(0_0_0/0.25)] lg:min-h-[max(36rem,min(calc(100svh-6rem),56rem))]"
       >
         <div ref={capaRef} className="absolute inset-x-0 -top-[5%] z-0 h-[110%] will-change-transform">
-          <img
+          <ImagenResponsiva
             src={IMAGEN_HERO}
+            anchos={ANCHOS_HERO}
+            sizes="100vw"
             alt=""
             width="1456"
             height="816"
