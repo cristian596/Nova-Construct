@@ -1,6 +1,10 @@
 import { useEffect, useRef } from 'react'
-import { MARCA } from '../data/marca.js'
-import { botonPrimario, botonSecundario, contenedor } from '../lib/ui.js'
+import { MARCA, esPendiente } from '../data/marca.js'
+import { contenedor } from '../lib/ui.js'
+import TarjetaProyecto from './TarjetaProyecto.jsx'
+
+// Cifras del pie del hero: se omiten las pendientes y con menos de dos se oculta la fila.
+const CIFRAS = MARCA.datosConfianza.filter((dato) => !esPendiente(dato.valor))
 
 // TODO: reemplazar por una foto real de obra (mínimo 2400 px de ancho; ésta mide 1456 × 816 y se ve blanda al ampliarse).
 const IMAGEN_HERO = '/placeholders/hero.webp'
@@ -132,10 +136,10 @@ export default function Hero() {
   }, [])
 
   return (
-    <section id="inicio" className="bg-graphite pt-16">
+    <section id="inicio" className="bg-white pt-16 lg:px-4 lg:pb-4 lg:pt-20">
       <div
         ref={raizRef}
-        className="relative isolate flex min-h-[max(36rem,min(calc(100svh-4rem),56rem))] w-full items-end overflow-hidden"
+        className="relative isolate flex min-h-[max(36rem,min(calc(100svh-4rem),56rem))] w-full items-end overflow-hidden rounded-2xl shadow-[0_16px_40px_rgb(0_0_0/0.25)] lg:min-h-[max(36rem,min(calc(100svh-6rem),56rem))]"
       >
         <div ref={capaRef} className="absolute inset-x-0 -top-[5%] z-0 h-[110%] will-change-transform">
           <img
@@ -148,6 +152,14 @@ export default function Hero() {
             decoding="async"
             className="size-full animate-zoom-lento object-[68%_center] object-cover lg:object-[75%_center] motion-reduce:animate-none"
           />
+        </div>
+
+        {/* Palabra decorativa: entre la foto y los degradados. La foto no tiene un elemento que permita
+            ponerla detrás del sujeto, así que queda detrás de todo el contenido. */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-[8%] z-[5] flex justify-center overflow-hidden lg:top-[4%]">
+          <span className="ancho-condensado animate-aparecer select-none whitespace-nowrap text-[36vw] font-extrabold uppercase leading-[0.8] text-white/20 motion-reduce:animate-none lg:text-[38vw] xl:text-[34rem]">
+            {MARCA.palabraFondo}
+          </span>
         </div>
 
         {/* Dos degradados de graphite: izquierda → derecha y abajo → arriba. */}
@@ -167,7 +179,7 @@ export default function Hero() {
           className="pointer-events-none absolute left-0 top-0 z-20 hidden size-[56rem] bg-[radial-gradient(closest-side,rgb(255_255_255/0.06),transparent)] opacity-0 transition-opacity duration-700 will-change-transform lg:block lg:motion-reduce:hidden"
         />
 
-        <div className={`${contenedor} relative z-30 pb-24 pt-12 text-white`}>
+        <div className={`${contenedor} relative z-30 pb-24 pt-12 text-white lg:pb-12`}>
           <h1 className="ancho-condensado flex flex-col items-start text-[3.25rem] font-extrabold leading-[0.9] sm:text-7xl lg:text-[6.5rem] xl:text-[7rem]">
             {TITULAR.map((linea, indice) => (
               // La máscara se extiende 0.14em hacia abajo (y se resta con margen) para no cortar las descendentes.
@@ -215,18 +227,54 @@ export default function Hero() {
           <p className="mt-6 max-w-xl text-lg leading-snug sm:text-xl">
             {MARCA.eslogan}
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a href="#cotizador" className={`${botonPrimario} ${foco}`}>
-              Cotizar mi proyecto
-            </a>
-            <a href="#proyectos" className={`${botonSecundario} ${foco}`}>
+
+          {CIFRAS.length >= 2 && (
+            <ul aria-label="Datos de la empresa" className="mt-8 flex flex-wrap gap-x-8 gap-y-4 sm:gap-x-12">
+              {CIFRAS.map((dato) => (
+                <li key={dato.etiqueta}>
+                  <p className="ancho-condensado text-5xl font-extrabold leading-none tabular-nums lg:text-6xl">{dato.valor}</p>
+                  <p className="mt-1 text-sm">{dato.etiqueta}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+            <div className="flex items-center gap-2">
+              <a
+                href="#cotizador"
+                className={`inline-flex min-h-12 items-center justify-center rounded-full bg-white px-7 py-3 text-base font-semibold text-graphite transition-colors hover:bg-concrete motion-reduce:transition-none ${foco}`}
+              >
+                Cotizar mi proyecto
+              </a>
+              <a
+                href="#cotizador"
+                aria-label="Ir al cotizador"
+                className={`inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-white text-safety transition-colors hover:bg-concrete motion-reduce:transition-none ${foco}`}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square" aria-hidden="true" className="size-5">
+                  <path d="M7 17 17 7M8 7h9v9" />
+                </svg>
+              </a>
+            </div>
+            <a
+              href="#proyectos"
+              className={`inline-flex min-h-12 items-center justify-center rounded-full border-2 border-white px-7 py-3 text-base font-semibold text-white transition-colors hover:bg-white hover:text-graphite motion-reduce:transition-none ${foco}`}
+            >
               Ver proyectos
             </a>
           </div>
         </div>
 
+        {/* Tarjeta de proyectos: solo escritorio, para no tapar el titular en móvil. */}
+        <div className={`${contenedor} pointer-events-none absolute inset-x-0 bottom-0 z-30 hidden justify-end pb-10 lg:flex`}>
+          <div className="pointer-events-auto">
+            <TarjetaProyecto />
+          </div>
+        </div>
+
         {/* Indicador de scroll: decorativo, sin foco. */}
-        <div aria-hidden="true" className={`${contenedor} pointer-events-none absolute inset-x-0 bottom-0 z-30 flex justify-end`}>
+        <div aria-hidden="true" className={`${contenedor} pointer-events-none absolute inset-x-0 bottom-0 z-30 flex justify-end lg:hidden`}>
           <span className="relative block h-16 w-px overflow-hidden bg-white/25">
             <span className="absolute inset-0 animate-indicador bg-safety motion-reduce:animate-none" />
           </span>

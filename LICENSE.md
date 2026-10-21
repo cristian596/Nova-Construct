@@ -1,6 +1,6 @@
 # LICENCIA DE USO COMERCIAL Y TÉRMINOS DE VENTA DE PLANTILLAS Y DESARROLLOS WEB (LANDING PAGES)
 
-**Última actualización:** TODO: 21/10/2026
+**Última actualización:** 21/10/2026
 **Aplica para:** Colombia  
 
 ---

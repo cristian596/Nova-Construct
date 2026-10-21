@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import Hero from '../components/Hero.jsx'
-import DatosConfianza from '../components/DatosConfianza.jsx'
 import Servicios from '../components/Servicios.jsx'
 import BandaFoto from '../components/BandaFoto.jsx'
 import Cotizador from '../components/Cotizador.jsx'
@@ -16,7 +15,6 @@ export default function Inicio() {
   return (
     <main id="contenido">
       <Hero />
-      <DatosConfianza />
       <Servicios onCotizar={setTipo} />
       <BandaFoto />
       <Cotizador tipo={tipo} onTipoChange={setTipo} />

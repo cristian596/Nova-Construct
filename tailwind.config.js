@@ -56,6 +56,8 @@ export default {
         'zoom-lento': 'zoom-lento 8s cubic-bezier(0.22, 0.61, 0.36, 1) both',
         // 3 s = intervalo del carrusel: la barra termina y su animationend avanza al siguiente proyecto.
         progreso: 'progreso 3s linear both',
+        // Tarjeta del hero: 5 s por proyecto.
+        'progreso-hero': 'progreso 5s linear both',
         'zoom-activo': 'zoom-activo 3s linear forwards',
         entrada: 'entrada 300ms cubic-bezier(0.22, 1, 0.36, 1) both',
         indicador: 'indicador 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite',

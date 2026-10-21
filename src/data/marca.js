@@ -1,7 +1,7 @@
 // Fuente única de los datos de la marca. Los componentes leen de aquí.
 // TODO: reemplazar todos los valores marcados antes de publicar.
 // Los campos cuyo valor empieza con "TODO" se ocultan automáticamente en la web (contacto, aviso
-// de privacidad y franja de datos) hasta que el cliente los complete con su información real.
+// de privacidad y cifras del hero) hasta que el cliente los complete con su información real.
 
 // Un campo está pendiente si está vacío o su valor empieza con "TODO".
 export const esPendiente = (valor) => !valor || String(valor).trim().startsWith('TODO')
@@ -59,8 +59,11 @@ export const MARCA = {
   // TODO: año de fundación. Se muestra como "Desde AAAA" en el hero.
   anio_fundacion: 1976,
 
-  // TODO: tres datos para la franja bajo el hero. Reemplazar "TODO" por la cifra real (por ejemplo
-  // "25", "300+", "10 años"). Las columnas con "TODO" se ocultan; si quedan menos de dos, se oculta la franja.
+  // TODO: palabra decorativa del hero; el cliente puede cambiarla
+  palabraFondo: 'OBRA',
+
+  // TODO: tres datos para el pie del hero. Reemplazar "TODO" por la cifra real (por ejemplo
+  // "25", "300+", "10 años"). Las columnas con "TODO" se ocultan; si quedan menos de dos, se oculta la fila.
   datosConfianza: [
     { valor: 'TODO', etiqueta: 'años de experiencia' },
     { valor: 'TODO', etiqueta: 'proyectos entregados' },
