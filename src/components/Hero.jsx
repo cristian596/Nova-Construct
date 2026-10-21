@@ -17,7 +17,8 @@ const TITULAR = ['Remodelamos,', 'terminamos', 'y entregamos', 'en plazo.']
 const RETRASO_INICIAL = 150
 const RETRASO_ENTRE_LINEAS = 120
 
-const DATO_COTA = `Desde ${MARCA.anio_fundacion}`
+// Sin año de fundación no hay cota: se oculta la línea completa (trazo, texto y extremos).
+const DATO_COTA = esPendiente(MARCA.anio_fundacion) ? null : `Desde ${MARCA.anio_fundacion}`
 
 // La capa de la imagen sobresale 5 % arriba y abajo; el parallax la baja como máximo ese 5 % de la altura.
 const DESPLAZAMIENTO_PARALLAX = 0.05
@@ -200,6 +201,7 @@ export default function Hero() {
           </h1>
 
           {/* Línea de cota: se traza de izquierda a derecha y el valor aparece al centro. */}
+          {DATO_COTA && (
           <div className="mt-8 flex max-w-[34rem] items-center">
             <span
               aria-hidden="true"
@@ -228,6 +230,7 @@ export default function Hero() {
               style={{ animationDelay: '1450ms' }}
             />
           </div>
+          )}
 
           <p className="mt-6 max-w-xl text-lg leading-snug sm:text-xl">
             {MARCA.eslogan}

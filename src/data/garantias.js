@@ -1,4 +1,5 @@
-// TODO: confirmar plazos y coberturas con el área legal antes de publicar.
+// Valores de ejemplo: el comprador debe reemplazarlos antes de publicar.
+// Confirma plazos y coberturas con el área legal antes de publicar.
 export const GARANTIAS = [
   {
     concepto: 'Obra civil',

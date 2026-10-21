@@ -42,7 +42,7 @@ EL CLIENTE declara conocer que para operar legalmente la Landing Page en Colombi
 ---
 
 ### 5. GARANTÍA Y SOPORTE TÉCNICO
-*   **Período de Garantía:** EL PROVEEDOR otorga una garantía de 90 días calendario a partir de la entrega para corregir errores de código (bugs), enlaces rotos o inconsistencias técnicas atribuibles al diseño original.
+*   **Período de Garantía:** EL PROVEEDOR otorga una garantía de 60 días calendario a partir de la entrega para corregir errores de código (bugs), enlaces rotos o inconsistencias técnicas atribuibles al diseño original.
 *   **Exclusiones de Garantía:** La garantía quedará sin efecto si los fallos son causados por:
     *   Modificaciones realizadas al código por parte de EL CLIENTE o terceros no autorizados.
     *   Cambios de servidor o incompatibilidades en el entorno de hosting donde se instale.
@@ -60,7 +60,7 @@ Este contrato se rige íntegramente por las leyes de la República de Colombia. 
 
 ---
 
-### 8. Contacto del proveedor
+### 8. CONTACTO DEL PROVEEDOR
 
 - Nombre: Cristian Camilo Higuera Carrillo
 - Correo: camilithopks6@gmail.com

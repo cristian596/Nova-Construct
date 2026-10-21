@@ -18,9 +18,25 @@ export const MARCA = {
   // TODO: ciudad sede. Se muestra junto a la dirección en la sección de contacto.
   ciudad: 'Bogotá',
 
-  // TODO: dominio real, con https:// y sin barra final. Index.html, robots.txt y sitemap.xml
-  // tienen su propia copia: ver README.
-  dominio: 'https://tudominio.com',
+  // TODO: dominio real, con https:// y sin barra final (por ejemplo, https://midominio.com).
+  // Es la única fuente: al compilar (`npm run build`) el plugin de vite.config.js lo escribe en
+  // index.html, robots.txt, sitemap.xml y en los datos estructurados (JSON-LD). Mientras esté
+  // pendiente, el build falla a propósito para que nadie publique con el dominio de ejemplo.
+  dominio: 'TODO: https://tudominio.com',
+
+  // TODO: departamento de la sede (por ejemplo, Cundinamarca). Solo se usa en los datos
+  // estructurados (JSON-LD) que se generan en el build; si está pendiente, se omite.
+  departamento: 'TODO: departamento',
+
+  // TODO: ciudades o región donde trabajas (por ejemplo, Bogotá y Cundinamarca). Solo se usa en
+  // los datos estructurados (JSON-LD) del build; si está pendiente, se omite.
+  zonaAtendida: 'TODO: ciudades o región atendida',
+
+  // TODO: razón social y NIT del comprador. Debe completarlos con los datos de su empresa (los mismos
+  // que figuran como EL CLIENTE en LICENSE.md). Se muestran en el footer; si están pendientes, no se
+  // muestran, pero `npm run revisar` bloquea la publicación (Ley 1480 de 2011: identificación del proveedor).
+  razonSocial: 'TODO: razón social',
+  nit: 'TODO: NIT',
 
   // Valores de los tokens de color. tailwind.config.js los lee de aquí.
   colores: {
@@ -68,8 +84,10 @@ export const MARCA = {
   // TODO: horario de atención.
   horario: 'TODO: lunes a viernes, 0:00 a 0:00',
 
-  // TODO: año de fundación. Se muestra como "Desde AAAA" en el hero.
-  anio_fundacion: 1976,
+  // TODO: el comprador debe poner el año real de fundación de su empresa (solo el número, por
+  // ejemplo 2012). Se muestra como "Desde AAAA" en la línea de cota del hero. Mientras esté
+  // pendiente, esa línea se oculta completa y `npm run revisar` bloquea la publicación.
+  anio_fundacion: 'TODO: año de fundación',
 
   // TODO: palabra decorativa del hero; el cliente puede cambiarla
   palabraFondo: 'OBRA',

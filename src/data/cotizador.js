@@ -1,4 +1,4 @@
-// CONFIRMAR PRECIOS: todos los valores de este archivo son de ejemplo.
+// Valores de ejemplo: el comprador debe reemplazarlos antes de publicar.
 // Fórmula: m² × precio base por tipo × multiplicador de acabados × factor de ciudad.
 
 // Precio base en COP por m².

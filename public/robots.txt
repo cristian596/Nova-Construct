@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-# TODO: reemplazar por el dominio real.
+# https://tudominio.com es un marcador: el build lo reemplaza por marca.dominio.
 Sitemap: https://tudominio.com/sitemap.xml

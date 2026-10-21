@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { MARCA } from '../data/marca.js'
+import { MARCA, esPendiente } from '../data/marca.js'
 import { SECCIONES } from '../data/secciones.js'
 import { AVISO_EXTERNO, POLITICA_EXTERNA } from '../lib/aviso.js'
 import { contenedor } from '../lib/ui.js'
@@ -15,6 +15,14 @@ const NOMBRES_REDES = {
 
 // Solo se muestran las redes con enlace.
 const REDES = Object.entries(MARCA.redes).filter(([, enlace]) => enlace)
+
+// Identificación del proveedor: se omite el dato pendiente y, si ambos lo están, la línea completa.
+const DATOS_LEGALES = [
+  !esPendiente(MARCA.razonSocial) && `Razón social: ${MARCA.razonSocial}`,
+  !esPendiente(MARCA.nit) && `NIT: ${MARCA.nit}`,
+]
+  .filter(Boolean)
+  .join(' · ')
 
 const CLASE_AVISO = 'flex min-h-11 items-center underline underline-offset-4 hover:text-white'
 
@@ -61,9 +69,12 @@ export default function Footer() {
         )}
 
         <div className="flex flex-col gap-2 border-t border-cement pt-6 text-sm text-concrete sm:flex-row sm:items-center sm:justify-between lg:col-span-12">
-          <p>
-            © {new Date().getFullYear()} {MARCA.nombre}. Todos los derechos reservados.
-          </p>
+          <div>
+            <p>
+              © {new Date().getFullYear()} {MARCA.nombre}. Todos los derechos reservados.
+            </p>
+            {DATOS_LEGALES && <p className="mt-1">{DATOS_LEGALES}</p>}
+          </div>
           <div className="flex flex-col sm:flex-row sm:gap-x-6">
             {AVISO_EXTERNO ? (
               <a href={MARCA.urlAvisoPrivacidad} className={CLASE_AVISO}>
