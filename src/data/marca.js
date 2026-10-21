@@ -1,12 +1,19 @@
 // Fuente única de los datos de la marca. Los componentes leen de aquí.
 // TODO: reemplazar todos los valores marcados antes de publicar.
+// Los campos cuyo valor empieza con "TODO" se ocultan automáticamente en la web (contacto, aviso
+// de privacidad y franja de datos) hasta que el cliente los complete con su información real.
+
+// Un campo está pendiente si está vacío o su valor empieza con "TODO".
+export const esPendiente = (valor) => !valor || String(valor).trim().startsWith('TODO')
+
 export const MARCA = {
   // Aparece en logotipo, header, footer, mensajes de WhatsApp y textos de accesibilidad.
   // La primera palabra se muestra en negrita fuerte en el logotipo.
   nombre: 'AQUI VA TU MARCA',
 
-  // TODO: frase corta bajo el titular del hero y en el footer.
-  eslogan: 'Construimos tus sueños con calidad, confianza y diseño arquitectónico.',
+  // Frase corta bajo el titular del hero y en el footer.
+  // TODO: confirmar con el cliente
+  eslogan: 'Presupuesto cerrado y cronograma firmado desde el primer día.',
 
   // TODO: ciudad sede. Se muestra junto a la dirección en la sección de contacto.
   ciudad: 'Bogotá',
@@ -51,6 +58,14 @@ export const MARCA = {
 
   // TODO: año de fundación. Se muestra como "Desde AAAA" en el hero.
   anio_fundacion: 1976,
+
+  // TODO: tres datos para la franja bajo el hero. Reemplazar "TODO" por la cifra real (por ejemplo
+  // "25", "300+", "10 años"). Las columnas con "TODO" se ocultan; si quedan menos de dos, se oculta la franja.
+  datosConfianza: [
+    { valor: 'TODO', etiqueta: 'años de experiencia' },
+    { valor: 'TODO', etiqueta: 'proyectos entregados' },
+    { valor: 'TODO', etiqueta: 'de garantía por escrito' },
+  ],
 
   // TODO: enlaces a perfiles. Solo se muestran en el footer los que no estén vacíos.
   redes: {

@@ -27,7 +27,7 @@ export default function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-cement bg-white">
-      <div className={`${contenedor} flex h-16 items-center justify-between gap-6`}>
+      <div className={`${contenedor} flex h-16 items-center justify-between gap-3 sm:gap-6`}>
         <a href={`${raiz}#inicio`}className="flex min-h-11 items-center" aria-label={`${MARCA.nombre}, ir al inicio`}>
           <Logo />
         </a>
@@ -47,9 +47,9 @@ export default function Header() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-3">
-          <a href={`${raiz}#cotizador`} className={`${botonPrimario} hidden min-h-11 py-2 sm:inline-flex`}>
-            Cotizar proyecto
+        <div className="flex items-center gap-1 sm:gap-3">
+          <a href={`${raiz}#cotizador`} className={`${botonPrimario} min-h-11 px-4 py-2 sm:px-6`}>
+            Cotizar<span className="sr-only sm:not-sr-only">&nbsp;proyecto</span>
           </a>
           <button
             ref={botonRef}

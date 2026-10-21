@@ -27,11 +27,15 @@ function BotonDesplazar({ direccion, onClick }) {
 }
 
 // Marco 4:5 que se conserva aunque la imagen falle: queda el fondo cement y la leyenda de abajo.
-function ImagenProyecto({ src, alt }) {
+// Etiqueta, degradado y marco son decorativos (aria-hidden): la misma información está en la leyenda.
+function ImagenProyecto({ src, alt, tipo, m2, semanas }) {
   const [fallo, setFallo] = useState(false)
 
   return (
-    <div className="aspect-[4/5] w-full bg-cement" {...(fallo && { role: 'img', 'aria-label': alt })}>
+    <div
+      className="relative aspect-[4/5] w-full overflow-hidden bg-cement"
+      {...(fallo && { role: 'img', 'aria-label': alt })}
+    >
       {!fallo && (
         <img
           src={src}
@@ -40,9 +44,28 @@ function ImagenProyecto({ src, alt }) {
           height="1200"
           loading="lazy"
           onError={() => setFallo(true)}
-          className="size-full object-cover"
+          className="size-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out motion-safe:group-hover:scale-[1.04] motion-safe:group-focus-within:scale-[1.04]"
         />
       )}
+
+      <span
+        aria-hidden="true"
+        className="absolute left-0 top-0 z-10 bg-safety px-3 py-1 text-sm font-semibold text-graphite"
+      >
+        {tipo}
+      </span>
+
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-graphite via-graphite/70 to-transparent px-4 pb-4 pt-16 text-sm font-semibold tabular-nums text-white opacity-0 transition-opacity duration-300 group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
+      >
+        {m2} m² · {semanas} semanas
+      </div>
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-20 border border-transparent group-focus-within:border-graphite"
+      />
     </div>
   )
 }
@@ -84,13 +107,22 @@ export default function Proyectos() {
         role="region"
         aria-label="Galería de proyectos, desplazable horizontalmente"
         tabIndex={0}
-        className={`mt-8 snap-x snap-mandatory overflow-x-auto overscroll-x-contain pb-6 ${ALINEACION} [scrollbar-color:#8B8F94_transparent] [scrollbar-width:thin]`}
+        className={`mt-8 snap-x snap-mandatory overflow-x-auto overscroll-x-contain pb-6 pt-2 ${ALINEACION} [scrollbar-color:#8B8F94_transparent] [scrollbar-width:thin]`}
       >
         <ul className="flex w-max gap-6">
           {PROYECTOS.map((proyecto) => (
             <li key={proyecto.nombre} className="w-[min(78vw,20rem)] shrink-0 snap-start lg:w-[19.5rem]">
-              <figure>
-                <ImagenProyecto src={proyecto.imagen} alt={proyecto.alt} />
+              <figure
+                tabIndex={0}
+                className="group focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safety"
+              >
+                <ImagenProyecto
+                  src={proyecto.imagen}
+                  alt={proyecto.alt}
+                  tipo={proyecto.tipo}
+                  m2={proyecto.m2}
+                  semanas={proyecto.semanas}
+                />
                 {/* graphite y no cement: cement sobre concrete da 2,8:1 y no cumple AA. */}
                 <p className="mt-2 text-xs text-graphite">Ilustración de ejemplo</p>
                 <figcaption className="mt-3 border-t border-graphite pt-4">

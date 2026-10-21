@@ -1,11 +1,14 @@
 import { useRef, useState } from 'react'
 import { CONTACTO, enlaceWhatsApp } from '../data/contacto.js'
 import { TIPOS } from '../data/cotizador.js'
-import { MARCA } from '../data/marca.js'
+import { MARCA, esPendiente } from '../data/marca.js'
 import { botonPrimario, contenedor, tituloSeccion } from '../lib/ui.js'
 
 const CAMPOS = ['nombre', 'telefono', 'tipo', 'mensaje']
 const VACIO = { nombre: '', telefono: '', tipo: '', mensaje: '' }
+
+// Dirección, teléfono y horario pendientes ("TODO...") no se muestran al visitante.
+const hayDatos = [MARCA.direccion, MARCA.telefono, MARCA.horario].some((valor) => !esPendiente(valor))
 
 function validar(valores) {
   const errores = {}
@@ -165,33 +168,43 @@ export default function Contacto() {
             </div>
           </form>
 
-          <dl className="mt-14 grid gap-6 border-t-2 border-graphite pt-8 sm:grid-cols-3">
-            <div>
-              <dt className="text-sm">Dirección</dt>
-              <dd className="mt-1 font-semibold">{MARCA.direccion}, {MARCA.ciudad}</dd>
-            </div>
-            <div>
-              <dt className="text-sm">Teléfono</dt>
-              <dd className="mt-1 font-semibold">
-                <a href={`tel:${CONTACTO.telefonoHref}`} className="-my-3 inline-block py-3 underline underline-offset-4">
-                  {MARCA.telefono}
-                </a>
-              </dd>
-            </div>
-            <div>
-              <dt className="text-sm">Horario</dt>
-              <dd className="mt-1 font-semibold">{MARCA.horario}</dd>
-            </div>
-          </dl>
-          <a
-            href={enlaceWhatsApp()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-flex min-h-11 items-center gap-2 font-semibold underline decoration-safety decoration-2 underline-offset-[6px]"
-          >
-            Escríbenos por WhatsApp
-            <span className="sr-only"> (se abre en una pestaña nueva)</span>
-          </a>
+          <div className="mt-14 border-t-2 border-graphite pt-8">
+            {hayDatos && (
+              <dl className="mb-6 grid gap-6 sm:grid-cols-3">
+                {!esPendiente(MARCA.direccion) && (
+                  <div>
+                    <dt className="text-sm">Dirección</dt>
+                    <dd className="mt-1 font-semibold">{MARCA.direccion}, {MARCA.ciudad}</dd>
+                  </div>
+                )}
+                {!esPendiente(MARCA.telefono) && (
+                  <div>
+                    <dt className="text-sm">Teléfono</dt>
+                    <dd className="mt-1 font-semibold">
+                      <a href={`tel:${CONTACTO.telefonoHref}`} className="-my-3 inline-block py-3 underline underline-offset-4">
+                        {MARCA.telefono}
+                      </a>
+                    </dd>
+                  </div>
+                )}
+                {!esPendiente(MARCA.horario) && (
+                  <div>
+                    <dt className="text-sm">Horario</dt>
+                    <dd className="mt-1 font-semibold">{MARCA.horario}</dd>
+                  </div>
+                )}
+              </dl>
+            )}
+            <a
+              href={enlaceWhatsApp()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center gap-2 font-semibold underline decoration-safety decoration-2 underline-offset-[6px]"
+            >
+              Escríbenos por WhatsApp
+              <span className="sr-only"> (se abre en una pestaña nueva)</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>

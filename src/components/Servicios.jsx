@@ -44,8 +44,12 @@ export default function Servicios({ onCotizar }) {
           {SERVICIOS.map((servicio) => (
             <li
               key={servicio.tipo}
-              className="grid gap-3 border-t border-graphite py-7 sm:grid-cols-12 sm:items-baseline sm:gap-6 lg:py-9"
+              className="group relative grid gap-3 overflow-hidden border-t border-graphite px-4 py-7 transition-colors duration-[250ms] focus-within:bg-concrete hover:bg-concrete motion-reduce:transition-none sm:grid-cols-12 sm:items-baseline sm:gap-6 sm:px-6 lg:py-9"
             >
+              <span
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 -translate-x-full bg-safety transition-transform duration-[250ms] ease-out group-focus-within:translate-x-0 group-hover:translate-x-0 motion-reduce:transition-none"
+              />
               <h3 className="ancho-semi text-3xl font-bold leading-none sm:col-span-4 lg:text-4xl">
                 {servicio.titulo}
               </h3>
@@ -53,13 +57,13 @@ export default function Servicios({ onCotizar }) {
               <a
                 href="#cotizador"
                 onClick={() => onCotizar(servicio.tipo)}
-                className="group inline-flex min-h-11 items-center gap-2 justify-self-start font-semibold underline decoration-safety decoration-2 underline-offset-[6px] sm:col-span-8 sm:col-start-5 lg:col-span-2 lg:justify-self-end"
+                className="group/enlace inline-flex min-h-11 items-center gap-2 justify-self-start focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-graphite font-semibold underline decoration-safety decoration-2 underline-offset-[6px] sm:col-span-8 sm:col-start-5 lg:col-span-2 lg:justify-self-end"
               >
                 Cotizar<span className="sr-only"> {servicio.titulo.toLowerCase()}</span>
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 20 20"
-                  className="size-4 transition-transform group-hover:translate-x-1 motion-reduce:transition-none"
+                  className="size-4 transition-transform group-hover/enlace:translate-x-1 motion-reduce:transition-none"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"

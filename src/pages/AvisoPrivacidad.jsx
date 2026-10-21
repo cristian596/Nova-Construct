@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { CONTACTO, enlaceWhatsApp } from '../data/contacto.js'
-import { MARCA } from '../data/marca.js'
+import { MARCA, esPendiente } from '../data/marca.js'
 import { contenedor, tituloSeccion } from '../lib/ui.js'
 
 // BORRADOR: Texto de ejemplo. Debe revisarlo un abogado antes de publicar.
@@ -65,18 +65,26 @@ export default function AvisoPrivacidad() {
               <dd>{MARCA.nombre}</dd>
               <dt className="font-semibold">Ciudad</dt>
               <dd>{MARCA.ciudad}</dd>
-              <dt className="font-semibold">Correo</dt>
-              <dd className="break-words">
-                <a href={`mailto:${MARCA.correo}`} className={enlaceTexto}>
-                  {MARCA.correo}
-                </a>
-              </dd>
-              <dt className="font-semibold">Teléfono</dt>
-              <dd>
-                <a href={`tel:${CONTACTO.telefonoHref}`} className={enlaceTexto}>
-                  {MARCA.telefono}
-                </a>
-              </dd>
+              {!esPendiente(MARCA.correo) && (
+                <>
+                  <dt className="font-semibold">Correo</dt>
+                  <dd className="break-words">
+                    <a href={`mailto:${MARCA.correo}`} className={enlaceTexto}>
+                      {MARCA.correo}
+                    </a>
+                  </dd>
+                </>
+              )}
+              {!esPendiente(MARCA.telefono) && (
+                <>
+                  <dt className="font-semibold">Teléfono</dt>
+                  <dd>
+                    <a href={`tel:${CONTACTO.telefonoHref}`} className={enlaceTexto}>
+                      {MARCA.telefono}
+                    </a>
+                  </dd>
+                </>
+              )}
             </dl>
           </Seccion>
 
@@ -122,16 +130,18 @@ export default function AvisoPrivacidad() {
           <Seccion numero={5} titulo="Canales para ejercer sus derechos">
             <p>Para hacer una consulta, reclamo o solicitud, escríbanos por cualquiera de estos canales:</p>
             <ul className={listaTexto}>
-              <li>
-                Correo:{' '}
-                <a href={`mailto:${MARCA.correo}`} className={`${enlaceTexto} break-words`}>
-                  {MARCA.correo}
-                </a>
-              </li>
+              {!esPendiente(MARCA.correo) && (
+                <li>
+                  Correo:{' '}
+                  <a href={`mailto:${MARCA.correo}`} className={`${enlaceTexto} break-words`}>
+                    {MARCA.correo}
+                  </a>
+                </li>
+              )}
               <li>
                 WhatsApp:{' '}
                 <a href={enlaceWhatsApp()} target="_blank" rel="noopener noreferrer" className={enlaceTexto}>
-                  {MARCA.telefono}
+                  {esPendiente(MARCA.telefono) ? 'Escríbanos por WhatsApp' : MARCA.telefono}
                   <span className="sr-only"> (se abre en una pestaña nueva)</span>
                 </a>
               </li>
