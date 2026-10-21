@@ -295,6 +295,7 @@ Lee la **[guía de cumplimiento](GUIA-CUMPLIMIENTO.md)** (Ley 1581 de 2012, Ley 
 
 - [ ] `npm run revisar` sin errores.
 - [ ] `marca.js` completo: dominio, razón social, NIT, WhatsApp, teléfono, correo, dirección, horario, año de fundación, departamento y zona atendida.
+- [ ] Dominio definitivo configurado en `marca.js` (ver [Dominio del sitio](#dominio-del-sitio)).
 - [ ] Razón social y NIT visibles en el footer.
 - [ ] Revisar el **cotizador con precios reales** (`cotizador.js`) y probar varios casos haciendo las cuentas a mano.
 - [ ] **Confirmar las garantías** (`garantias.js`) con el responsable de la empresa.
@@ -306,6 +307,44 @@ Lee la **[guía de cumplimiento](GUIA-CUMPLIMIENTO.md)** (Ley 1581 de 2012, Ley 
 - [ ] **Política de tratamiento de datos** y **aviso de privacidad**: completarlos, hacer que **un abogado los revise**, actualizar `avisoPrivacidadActualizado` y `fechaPolitica`, y comprobar que `/aviso-de-privacidad` y `/politica-de-tratamiento-de-datos` abren y que los enlaces del footer funcionan.
 - [ ] Casilla de autorización del formulario activa y sin marcar por defecto.
 - [ ] Ejecutar `npm run publicar` y confirmar que termina sin errores.
+
+---
+
+## Dominio del sitio
+
+El dominio aparece en las etiquetas de SEO (`canonical`, `og:url`), en el mapa del sitio (`sitemap.xml`), en la imagen de vista previa al compartir (`og:image`) y en los datos estructurados. Por eso debe coincidir exactamente con la dirección final donde se publicará la página.
+
+Tienes tres caminos:
+
+1. **Para probar:** usa la dirección gratuita del hosting, por ejemplo `nombre.pages.dev` o `nombre.netlify.app`. Se escribe en `marca.js` y permite que el build funcione mientras terminas la configuración.
+2. **Para publicar:** compra un dominio propio en un registrador, por ejemplo `.com` o `.co`, a nombre de la empresa compradora y con su correo.
+3. **Conectarlo:** el hosting te indica los registros DNS exactos. Los pasos están en [Conectar tu dominio propio](#conectar-tu-dominio-propio), dentro de la sección 7; no se repiten aquí.
+
+### Qué escribir en `marca.js`
+
+El campo `dominio` de `src/data/marca.js` se escribe con `https://` y **sin barra final**, y debe ser exactamente la dirección que usará el visitante:
+
+```js
+dominio: 'https://constructoraandes.com', // ejemplo: pon tu dirección real
+```
+
+### Orden recomendado
+
+1. Elegir la dirección de prueba o el dominio propio.
+2. Escribir esa dirección en `dominio` de `marca.js`.
+3. Ejecutar `npm run revisar` y corregir lo que bloquee.
+4. Desplegar (sección 7).
+5. Conectar el dominio propio en el hosting, si aplica.
+6. Si la dirección de prueba cambió, poner el dominio final en `dominio` de `marca.js` y volver a desplegar.
+
+### Si el dominio está pendiente
+
+`npm run build` (y por lo tanto `npm run publicar`) falla con un mensaje claro. Es un freno a propósito para no publicar con la dirección de ejemplo. Para trabajar sin publicar, usa `npm run dev`, que no lo exige.
+
+### Renovación y cambios posteriores
+
+- El dominio se renueva cada año y **la empresa compradora paga la renovación**. Conviene que el correo de recuperación de la cuenta del registrador sea el de la empresa.
+- Si el dominio cambia después de publicar, agrega la nueva propiedad en Google Search Console (sección 8) y configura las redirecciones desde el dominio anterior en el hosting.
 
 ---
 
