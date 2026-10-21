@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { MARCA } from '../data/marca.js'
 import { SECCIONES } from '../data/secciones.js'
-import { AVISO_EXTERNO } from '../lib/aviso.js'
+import { AVISO_EXTERNO, POLITICA_EXTERNA } from '../lib/aviso.js'
 import { contenedor } from '../lib/ui.js'
 import Logo from './Logo.jsx'
 
@@ -64,15 +64,26 @@ export default function Footer() {
           <p>
             © {new Date().getFullYear()} {MARCA.nombre}. Todos los derechos reservados.
           </p>
-          {AVISO_EXTERNO ? (
-            <a href={MARCA.urlAvisoPrivacidad} className={CLASE_AVISO}>
-              Aviso de privacidad
-            </a>
-          ) : (
-            <Link to={MARCA.urlAvisoPrivacidad} className={CLASE_AVISO}>
-              Aviso de privacidad
-            </Link>
-          )}
+          <div className="flex flex-col sm:flex-row sm:gap-x-6">
+            {AVISO_EXTERNO ? (
+              <a href={MARCA.urlAvisoPrivacidad} className={CLASE_AVISO}>
+                Aviso de privacidad
+              </a>
+            ) : (
+              <Link to={MARCA.urlAvisoPrivacidad} className={CLASE_AVISO}>
+                Aviso de privacidad
+              </Link>
+            )}
+            {POLITICA_EXTERNA ? (
+              <a href={MARCA.urlPoliticaDatos} className={CLASE_AVISO}>
+                Política de tratamiento de datos
+              </a>
+            ) : (
+              <Link to={MARCA.urlPoliticaDatos} className={CLASE_AVISO}>
+                Política de tratamiento de datos
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </footer>

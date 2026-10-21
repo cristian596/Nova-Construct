@@ -46,6 +46,17 @@ export const MARCA = {
   // y el footer la usará tal cual, en la misma pestaña.
   urlAvisoPrivacidad: '/aviso-de-privacidad',
 
+  // Dirección de la política de tratamiento de datos que enlazan el footer y el formulario. Por defecto es
+  // la página interna de la plantilla. Si el cliente tiene su política publicada en otra URL, reemplazar
+  // este valor por la URL completa (https://...).
+  urlPoliticaDatos: '/politica-de-tratamiento-de-datos',
+
+  // TODO: actualizar cada vez que se revise el texto
+  fechaPolitica: '2026-10-21',
+
+  // Se guarda con cada autorización cuando exista backend
+  versionPolitica: '1.0',
+
   // Fecha de la última actualización del aviso, formato AAAA-MM-DD. Se muestra en "Vigencia".
   // TODO: actualizarla cada vez que se revise el texto del aviso.
   avisoPrivacidadActualizado: '2026-10-20',

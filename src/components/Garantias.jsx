@@ -1,54 +1,59 @@
+import { Building2, PaintRoller, Plug, ShieldCheck } from 'lucide-react'
 import { GARANTIAS } from '../data/garantias.js'
 import { contenedor, tituloSeccion } from '../lib/ui.js'
-import Cota from './Cota.jsx'
 
-const maximo = Math.max(...GARANTIAS.map((garantia) => garantia.anios))
+const ICONOS = {
+  'Obra civil': Building2,
+  Acabados: PaintRoller,
+  Instalaciones: Plug,
+}
 
 export default function Garantias() {
   return (
     <section id="garantias" aria-labelledby="garantias-titulo" className="bg-concrete py-20 lg:py-28">
-      <div className={`${contenedor} grid gap-10 lg:grid-cols-12 lg:gap-16`}>
-        <div className="lg:col-span-4">
-          <h2 id="garantias-titulo" className={tituloSeccion}>
-            Garantía por escrito
-          </h2>
+      <div className={contenedor}>
+        <div className="max-w-2xl">
+          <div className="flex items-center gap-4">
+            <ShieldCheck className="size-10 shrink-0 text-graphite" strokeWidth={2} aria-hidden="true" />
+            <h2 id="garantias-titulo" className={tituloSeccion}>
+              Garantía por escrito
+            </h2>
+          </div>
+          <p className="mt-3 text-sm">Cobertura por concepto, desde la entrega</p>
           <p className="mt-5 text-lg leading-relaxed">
             Cada entrega incluye un acta con estos plazos. Si algo falla dentro de la cobertura, lo corregimos sin costo.
           </p>
+          <p className="mt-6 border-t-2 border-graphite pt-3 text-sm font-semibold">
+            Garantía por escrito en el acta de entrega
+          </p>
         </div>
 
-        <div className="lg:col-span-8">
-          <Cota valor={`hasta ${maximo} años`} className="mb-8" />
-          <table className="w-full border-collapse text-left">
-            <caption className="sr-only">Plazos y coberturas de garantía</caption>
-            <thead>
-              <tr className="border-b-2 border-graphite text-sm">
-                <th scope="col" className="w-[30%] py-3 pr-4 font-semibold">
-                  Concepto
-                </th>
-                <th scope="col" className="w-[20%] py-3 pr-4 font-semibold">
-                  Plazo
-                </th>
-                <th scope="col" className="py-3 font-semibold">
-                  Cobertura
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {GARANTIAS.map((garantia) => (
-                <tr key={garantia.concepto} className="border-b border-graphite align-baseline">
-                  <th scope="row" className="ancho-semi py-5 pr-4 text-lg font-bold sm:text-xl">
-                    {garantia.concepto}
-                  </th>
-                  <td className="ancho-condensado whitespace-nowrap py-5 pr-4 text-2xl font-extrabold tabular-nums sm:text-3xl">
-                    {garantia.plazo}
-                  </td>
-                  <td className="py-5 text-sm leading-relaxed sm:text-base">{garantia.cobertura}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
+          {GARANTIAS.map((garantia) => {
+            const Icono = ICONOS[garantia.concepto]
+            const [cantidad, unidad] = garantia.plazo.split(' ')
+            return (
+              <li
+                key={garantia.concepto}
+                className="flex flex-col border border-graphite bg-white p-6 sm:last:col-span-2 lg:last:col-span-1"
+              >
+                <div className="flex items-center gap-3">
+                  {Icono && <Icono className="size-8 shrink-0 text-graphite" strokeWidth={2} aria-hidden="true" />}
+                  <h3 className="ancho-semi text-xl font-bold leading-tight">{garantia.concepto}</h3>
+                </div>
+
+                <div className="mt-6">
+                  <p className="text-sm">Plazo</p>
+                  <p className="ancho-condensado mt-1 inline-block bg-safety px-3 py-1 text-4xl font-extrabold leading-none tabular-nums text-graphite">
+                    {cantidad} <span className="text-lg">{unidad}</span>
+                  </p>
+                </div>
+
+                <p className="mt-6 text-base leading-relaxed">{garantia.cobertura}</p>
+              </li>
+            )
+          })}
+        </ul>
       </div>
     </section>
   )
