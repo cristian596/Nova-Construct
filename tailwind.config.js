@@ -31,6 +31,17 @@ export default {
         'zoom-lento': {
           from: { transform: 'scale3d(1.08, 1.08, 1)' },
         },
+        // Carrusel de proyectos: barra de progreso, zoom de la imagen activa y entrada de datos.
+        progreso: {
+          from: { transform: 'scaleX(0)' },
+        },
+        'zoom-activo': {
+          from: { transform: 'scale3d(1, 1, 1)' },
+          to: { transform: 'scale3d(1.06, 1.06, 1)' },
+        },
+        entrada: {
+          from: { opacity: '0', transform: 'translate3d(0, 8px, 0)' },
+        },
         // Línea naranja que entra por arriba, cruza la pista y sale por abajo.
         indicador: {
           '0%': { transform: 'translate3d(0, -100%, 0)' },
@@ -43,6 +54,10 @@ export default {
         trazar: 'trazar 450ms cubic-bezier(0.65, 0, 0.35, 1) both',
         aparecer: 'aparecer 300ms ease-out both',
         'zoom-lento': 'zoom-lento 8s cubic-bezier(0.22, 0.61, 0.36, 1) both',
+        // 3 s = intervalo del carrusel: la barra termina y su animationend avanza al siguiente proyecto.
+        progreso: 'progreso 3s linear both',
+        'zoom-activo': 'zoom-activo 3s linear forwards',
+        entrada: 'entrada 300ms cubic-bezier(0.22, 1, 0.36, 1) both',
         indicador: 'indicador 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite',
       },
     },
