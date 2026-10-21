@@ -23,7 +23,7 @@ export default function Footer() {
   const raiz = useLocation().pathname === '/' ? '' : '/'
 
   return (
-    <footer className="bg-graphite py-14 text-white">
+    <footer data-fondo="oscuro" className="bg-graphite py-14 text-white">
       <div className={`${contenedor} grid gap-10 lg:grid-cols-12`}>
         <div className="lg:col-span-4">
           <Logo className="text-3xl" />

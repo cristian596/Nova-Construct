@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react'
 import { ACABADOS, CIUDADES, M2, TIPOS } from '../data/cotizador.js'
-import { enlaceWhatsApp } from '../data/contacto.js'
+import { enlaceWhatsApp, whatsappValido } from '../data/contacto.js'
 import { calcularRango, formatearCOP, m2Valido, mensajeWhatsApp, PASOS, validarCotizacion } from '../lib/cotizar.js'
 import { botonPrimario, contenedor, tituloSeccion } from '../lib/ui.js'
+import { generarFolio } from '../lib/folio.js'
 import CotaControl from './CotaControl.jsx'
 
 const lista = new Intl.ListFormat('es', { type: 'conjunction' })
@@ -53,6 +54,7 @@ export default function Cotizador({ tipo, onTipoChange }) {
   const [acabados, setAcabados] = useState('')
   const [ciudad, setCiudad] = useState('')
   const [intentado, setIntentado] = useState(false)
+  const [folio] = useState(() => generarFolio())
 
   const refs = {
     tipo: useRef(null),
@@ -80,7 +82,7 @@ export default function Cotizador({ tipo, onTipoChange }) {
   }
 
   return (
-    <section id="cotizador" aria-labelledby="cotizador-titulo" className="bg-graphite py-20 text-white lg:py-28">
+    <section id="cotizador" aria-labelledby="cotizador-titulo" data-fondo="oscuro" className="bg-graphite py-20 text-white lg:py-28">
       <div className={contenedor}>
         <div className="max-w-3xl">
           <h2 id="cotizador-titulo" className={tituloSeccion}>
@@ -240,9 +242,9 @@ export default function Cotizador({ tipo, onTipoChange }) {
               Rango preliminar. La cotización final requiere visita técnica.
             </p>
 
-            {rango ? (
+            {!whatsappValido ? null : rango ? (
               <a
-                href={enlaceWhatsApp(mensajeWhatsApp(rango))}
+                href={enlaceWhatsApp(mensajeWhatsApp(rango, folio))}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${botonPrimario} mt-6 w-full`}

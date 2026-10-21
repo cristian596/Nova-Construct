@@ -256,7 +256,7 @@ export default function Proyectos() {
               <li key={proyecto.nombre} className="w-[min(78vw,20rem)] shrink-0 snap-start lg:w-[22rem] lg:snap-center">
                 <figure
                   tabIndex={0}
-                  className={`group transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,0.61,0.36,1)] motion-reduce:transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safety ${esActivo ? 'scale-100 opacity-100' : 'scale-[0.96] opacity-60'}`}
+                  className={`group transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,0.61,0.36,1)] motion-reduce:transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safety ${esActivo ? 'scale-100 opacity-100' : 'scale-[0.96] opacity-75'}`}
                 >
                   <ImagenProyecto
                     src={proyecto.imagen}

@@ -74,7 +74,7 @@ Todo lo que se repite en la web (nombre, teléfono, dirección…) está en **`s
 **Ejemplo, antes y después:**
 
 ```js
-// Antes
+// Antes (570000000000 es un ejemplo, no un número real)
 nombre: 'AQUI VA TU MARCA',
 telefonoWhatsapp: '570000000000',
 telefono: 'TODO: +57 000 000 0000',
@@ -344,6 +344,22 @@ Para aparecer en Google Maps y en búsquedas locales, crea además un perfil gra
 4. **Un comando no funciona.** Verifica `node -v` (mínimo 20.19) y que estás dentro de la carpeta del proyecto.
 
 **Próximos pasos sugeridos:** agregar tus fotos reales, conectar el formulario a un endpoint, hacer revisar el aviso de privacidad por un abogado, abrir el perfil de Google Business y medir visitas con una herramienta de analítica de tu preferencia.
+
+---
+
+## Cómo gestionar las cotizaciones
+
+**Dónde llegan.** Cada cotización del cotizador y cada solicitud del formulario llega como un mensaje de WhatsApp al número de `telefonoWhatsapp` en `src/data/marca.js`. Instala la app gratuita **WhatsApp Business** en el teléfono del negocio y registra ese número: así recibes los mensajes con un perfil de empresa, etiquetas y respuestas rápidas.
+
+**El folio.** Todos los mensajes incluyen una línea `Folio: COT-AAMMDD-XXXX` (fecha y 4 dígitos al azar). Úsalo para buscar la conversación: en WhatsApp Business toca la lupa y escribe el folio. El visitante conserva el mismo folio mientras no recargue la página.
+
+**Etiquetas recomendadas.** Nueva, Visita agendada, Cotizada, Cerrada, No avanzó. Para crearlas: en WhatsApp Business ve a *Más opciones (⋮) → Herramientas de empresa → Etiquetas → Etiqueta nueva*. Para asignarlas, mantén presionado un chat y toca el ícono de etiqueta.
+
+**Respuestas rápidas recomendadas.** Confirmar visita, pedir fotos o planos, enviar cotización formal. Para crearlas: *Más opciones (⋮) → Herramientas de empresa → Respuestas rápidas → Añadir*. Escribe el mensaje y un atajo (por ejemplo `/visita`); en cualquier chat, escribe `/` para usarlo.
+
+**Qué no hace la landing.** La landing **no guarda cotizaciones**: cada mensaje llega directamente al WhatsApp del comprador y no pasa por ningún servidor ni base de datos.
+
+**Si necesitas un registro.** Crea tu propia hoja de cálculo o herramienta de seguimiento y usa el folio como identificador único de cada cotización.
 
 ---
 

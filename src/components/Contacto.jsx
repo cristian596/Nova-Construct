@@ -1,9 +1,10 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CONTACTO, PRESUPUESTOS, TIEMPO_RESPUESTA, enlaceWhatsApp } from '../data/contacto.js'
+import { CONTACTO, PRESUPUESTOS, mensajeConfirmacion, mensajeError, TIEMPO_RESPUESTA, enlaceWhatsApp, whatsappValido } from '../data/contacto.js'
 import { CIUDADES, TIPOS } from '../data/cotizador.js'
 import { MARCA, esPendiente } from '../data/marca.js'
 import { AVISO_EXTERNO, POLITICA_EXTERNA } from '../lib/aviso.js'
+import { generarFolio } from '../lib/folio.js'
 import { botonPrimario, botonSecundario, contenedor, tituloSeccion } from '../lib/ui.js'
 
 const CAMPOS = ['nombre', 'telefono', 'tipo', 'autorizacion']
@@ -11,7 +12,8 @@ const VACIO = { nombre: '', telefono: '', tipo: '', ciudad: '', presupuesto: '',
 
 // Dirección, teléfono y horario pendientes ("TODO...") no se muestran al visitante.
 const hayDatos = [MARCA.direccion, MARCA.telefono, MARCA.horario].some((valor) => !esPendiente(valor))
-const hayWhatsapp = !esPendiente(MARCA.telefonoWhatsapp)
+const hayWhatsapp = whatsappValido
+const hayLateral = hayWhatsapp || hayDatos
 
 function validar(valores) {
   const errores = {}
@@ -23,24 +25,26 @@ function validar(valores) {
   return errores
 }
 
-// Mensaje de WhatsApp con los datos del formulario que ya estén llenos.
-function textoWhatsApp(valores) {
-  const nombre = valores.nombre.trim()
-  const telefono = valores.telefono.trim()
+const LIMITE_MENSAJE = 1000
+
+// Mensaje de WhatsApp con formato fijo; los campos opcionales vacíos llevan su valor por defecto.
+function textoWhatsApp(valores, folio) {
   const tipo = TIPOS.find((opcion) => opcion.id === valores.tipo)
   const ciudad = CIUDADES.find((opcion) => opcion.id === valores.ciudad)
-  const mensaje = valores.mensaje.trim()
+  let mensaje = valores.mensaje.trim()
+  if (mensaje.length > LIMITE_MENSAJE) mensaje = `${mensaje.slice(0, LIMITE_MENSAJE)} (continúa en el chat)`
 
-  const saludo = [`Hola, ${MARCA.nombre}.`]
-  if (nombre) saludo.push(`Soy ${nombre}${telefono ? ` (${telefono})` : ''}.`)
-  else if (telefono) saludo.push(`Mi teléfono es ${telefono}.`)
-  const lineas = [saludo.join(' ')]
-  if (tipo) lineas.push(`Proyecto: ${tipo.nombre}`)
-  if (ciudad) lineas.push(`Ciudad: ${ciudad.nombre}`)
-  if (valores.presupuesto) lineas.push(`Presupuesto estimado: ${valores.presupuesto}`)
-  if (mensaje) lineas.push('', mensaje)
-  if (valores.autorizacion) lineas.push('', `Autorización de datos: sí (política v${MARCA.versionPolitica})`)
-  return lineas.join('\n')
+  return [
+    `Hola, quiero solicitar una visita técnica con ${MARCA.nombre}.`,
+    `Folio: ${folio}`,
+    `Nombre: ${valores.nombre.trim() || 'No indicado'}`,
+    `Teléfono: ${valores.telefono.trim() || 'No indicado'}`,
+    `Tipo de proyecto: ${tipo?.nombre ?? 'No indicado'}`,
+    `Ciudad: ${ciudad?.nombre ?? 'No indicada'}`,
+    `Presupuesto estimado: ${valores.presupuesto || 'No indicado'}`,
+    `Mensaje: ${mensaje || 'Sin mensaje'}`,
+    `Autorización de datos: ${valores.autorizacion ? `sí (política v${MARCA.versionPolitica})` : 'no'}`,
+  ].join('\n')
 }
 
 // Borde de 1 px; en foco o error pasa a 2 px y el relleno baja 1 px para que el campo no cambie de tamaño.
@@ -63,9 +67,9 @@ function MensajeError({ id, children }) {
   )
 }
 
-function Campo({ id, etiqueta, error, children }) {
+function Campo({ id, etiqueta, error, className, children }) {
   return (
-    <div>
+    <div className={className}>
       <label htmlFor={id} className="block text-sm font-semibold">
         {etiqueta}
       </label>
@@ -87,9 +91,11 @@ export default function Contacto() {
   const [valores, setValores] = useState(VACIO)
   const [errores, setErrores] = useState({})
   const [intentado, setIntentado] = useState(false)
+  const [folio] = useState(() => generarFolio())
   const [estado, setEstado] = useState('inicial')
   const formRef = useRef(null)
   const mensajeRef = useRef(null)
+  const avisoRef = useRef(null)
 
   // El textarea parte en 3 filas y crece con el texto.
   useLayoutEffect(() => {
@@ -103,6 +109,7 @@ export default function Contacto() {
     const { name, type, checked, value } = evento.target
     const siguientes = { ...valores, [name]: type === 'checkbox' ? checked : value }
     setValores(siguientes)
+    if (hayAviso) setEstado('inicial')
     if (intentado) setErrores(validar(siguientes))
   }
 
@@ -136,7 +143,7 @@ export default function Contacto() {
     // versión de la política (MARCA.versionPolitica) y, si es posible, la dirección IP.
     // Sin ese registro, la autorización no tiene prueba.
     if (!CONTACTO.formularioEndpoint) {
-      window.open(enlaceWhatsApp(textoWhatsApp(valores)), '_blank', 'noopener,noreferrer')
+      window.open(enlaceWhatsApp(textoWhatsApp(valores, folio)), '_blank', 'noopener,noreferrer')
       setEstado('whatsapp')
       return
     }
@@ -150,18 +157,17 @@ export default function Contacto() {
       })
       if (!respuesta.ok) throw new Error(String(respuesta.status))
       setEstado('enviado')
-      setValores(VACIO)
-      setIntentado(false)
     } catch {
       setEstado('error')
     }
   }
 
-  const mensajesEstado = {
-    whatsapp: 'Abrimos WhatsApp con tu mensaje. Si no se abrió, escríbenos con el botón de WhatsApp.',
-    enviado: 'Recibimos tu mensaje. Te llamaremos para agendar la visita técnica.',
-    error: 'No pudimos enviar el mensaje. Intenta de nuevo o escríbenos por WhatsApp.',
-  }
+  const hayAviso = estado === 'whatsapp' || estado === 'enviado' || estado === 'error'
+
+  // El foco pasa al aviso cuando aparece, para que lo lea un lector de pantalla.
+  useEffect(() => {
+    if (hayAviso) avisoRef.current?.focus()
+  }, [hayAviso, estado])
 
   const claveAviso = 'inline-flex min-h-11 items-center text-sm underline underline-offset-4'
 
@@ -177,8 +183,8 @@ export default function Contacto() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-10 border border-graphite bg-concrete p-5 lg:grid-cols-12 lg:gap-12 lg:p-8">
-          <form ref={formRef} noValidate onSubmit={enviar} className="lg:col-span-8">
+        <div className={`mt-12 border border-graphite bg-concrete p-5 lg:p-8 ${hayLateral ? 'lg:grid lg:grid-cols-12' : ''}`}>
+          <form ref={formRef} noValidate onSubmit={enviar} className={hayLateral ? 'pb-12 lg:col-span-7 lg:pb-0 lg:pr-12' : 'mx-auto w-full max-w-3xl'}>
             <div className="grid gap-6 sm:grid-cols-2">
               <Campo id="contacto-nombre" etiqueta="Nombre" error={errores.nombre}>
                 <input type="text" autoComplete="name" {...atributos('nombre', true)} />
@@ -186,7 +192,7 @@ export default function Contacto() {
               <Campo id="contacto-telefono" etiqueta="Teléfono" error={errores.telefono}>
                 <input type="tel" autoComplete="tel" inputMode="tel" {...atributos('telefono', true)} />
               </Campo>
-              <Campo id="contacto-tipo" etiqueta="Tipo de proyecto" error={errores.tipo}>
+              <Campo id="contacto-tipo" etiqueta="Tipo de proyecto" error={errores.tipo} className="sm:col-span-2">
                 <div className="relative">
                   <select {...atributos('tipo', true)} className={estiloSelect}>
                     <option value="">Selecciona una opción</option>
@@ -199,7 +205,7 @@ export default function Contacto() {
                   <Chevron />
                 </div>
               </Campo>
-              <Campo id="contacto-ciudad" etiqueta="Ciudad">
+              <Campo id="contacto-ciudad" etiqueta="Ciudad" className="sm:col-span-2">
                 <div className="relative">
                   <select autoComplete="address-level2" {...atributos('ciudad')} className={estiloSelect}>
                     <option value="">Selecciona una opción</option>
@@ -270,6 +276,40 @@ export default function Contacto() {
             </div>
 
             <div className="mt-6">
+              {hayAviso && (
+                <div
+                  ref={avisoRef}
+                  role="status"
+                  aria-live="polite"
+                  tabIndex={-1}
+                  className={`mb-6 flex items-start gap-3 border-2 bg-white p-5 text-sm font-medium ${
+                    estado === 'error' ? 'border-safety' : 'border-graphite'
+                  }`}
+                >
+                  <svg aria-hidden="true" viewBox="0 0 20 20" className="mt-0.5 size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M4 10.5l4 4 8-9" />
+                  </svg>
+                  <p>
+                    {estado === 'whatsapp' && (
+                      <>
+                        Revisa WhatsApp y pulsa enviar para completar tu solicitud. Si no se abrió,{' '}
+                        <a
+                          href={enlaceWhatsApp(textoWhatsApp(valores, folio))}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline underline-offset-4"
+                        >
+                          abrir WhatsApp de nuevo
+                          <span className="sr-only"> (se abre en una pestaña nueva)</span>
+                        </a>
+                        .
+                      </>
+                    )}
+                    {estado === 'enviado' && mensajeConfirmacion}
+                    {estado === 'error' && mensajeError}
+                  </p>
+                </div>
+              )}
               <button
                 type="submit"
                 disabled={estado === 'enviando'}
@@ -278,29 +318,26 @@ export default function Contacto() {
                 {estado === 'enviando' ? 'Enviando…' : 'Solicitar cotización'}
               </button>
               <p className="mt-3 text-sm">{TIEMPO_RESPUESTA}</p>
-              <p role="status" className="mt-3 text-sm font-medium empty:hidden">
-                {mensajesEstado[estado]}
-              </p>
               <p className="mt-6 text-sm">Usamos tus datos solo para responder tu solicitud.</p>
               {AVISO_EXTERNO ? (
-                <a href={MARCA.urlAvisoPrivacidad} className={claveAviso}>
+                <a href={MARCA.urlAvisoPrivacidad} className={`${claveAviso} -mb-3`}>
                   Ver aviso de privacidad
                 </a>
               ) : (
-                <Link to={MARCA.urlAvisoPrivacidad} className={claveAviso}>
+                <Link to={MARCA.urlAvisoPrivacidad} className={`${claveAviso} -mb-3`}>
                   Ver aviso de privacidad
                 </Link>
               )}
             </div>
           </form>
 
-          {(hayWhatsapp || hayDatos) && (
-            <div className="border-t border-graphite pt-8 lg:col-span-4 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
+          {hayLateral && (
+            <div className="border-t border-cement pt-12 lg:col-span-5 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
               {hayWhatsapp && (
                 <div>
                   <p className="font-semibold">¿Prefieres respuesta inmediata?</p>
                   <a
-                    href={enlaceWhatsApp(textoWhatsApp(valores.autorizacion ? valores : VACIO))}
+                    href={enlaceWhatsApp(textoWhatsApp(valores.autorizacion ? valores : VACIO, folio))}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`${botonSecundario} mt-4 w-full`}

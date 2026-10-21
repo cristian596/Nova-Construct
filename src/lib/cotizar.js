@@ -50,15 +50,15 @@ const cop = new Intl.NumberFormat('es-CO', {
 
 export const formatearCOP = (valor) => cop.format(valor)
 
-export function mensajeWhatsApp(rango) {
+export function mensajeWhatsApp(rango, folio) {
   return [
-    `Hola, ${MARCA.nombre}. Quiero avanzar con esta cotización preliminar:`,
-    `• Proyecto: ${rango.tipo.nombre}`,
-    `• Área: ${rango.m2} m²`,
-    `• Acabados: ${rango.acabados.nombre}`,
-    `• Ciudad: ${rango.ciudad.nombre}`,
-    `• Rango preliminar: ${formatearCOP(rango.minimo)} a ${formatearCOP(rango.maximo)}`,
-    '',
-    'Entiendo que la cotización final requiere visita técnica.',
+    `Hola, quiero cotizar un proyecto con ${MARCA.nombre}.`,
+    `Folio: ${folio}`,
+    `Tipo: ${rango.tipo.nombre}`,
+    `Área: ${rango.m2} m²`,
+    `Acabados: ${rango.acabados.nombre}`,
+    `Ciudad: ${rango.ciudad.nombre}`,
+    `Rango preliminar: ${formatearCOP(rango.minimo)} a ${formatearCOP(rango.maximo)}`,
+    'Nota: rango preliminar, sujeto a visita técnica.',
   ].join('\n')
 }

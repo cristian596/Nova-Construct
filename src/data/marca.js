@@ -31,9 +31,10 @@ export const MARCA = {
     safety: '#FF6A13', // acento: botones, foco, marcas
   },
 
-  // TODO: número de WhatsApp en formato internacional, solo dígitos (57 + número).
-  // El enlace de llamada (tel:) usa este mismo número.
-  telefonoWhatsapp: '570000000000',
+  // TODO: el cliente debe poner su número de WhatsApp en formato internacional, solo dígitos y
+  // sin "TODO" (por ejemplo, 573001234567). Mientras empiece con "TODO", los botones de WhatsApp
+  // quedan ocultos. El enlace de llamada (tel:) usa este mismo número.
+  telefonoWhatsapp: 'TODO: 57XXXXXXXXXX',
 
   // TODO: teléfono tal como se muestra en la web.
   telefono: 'TODO: +57 000 000 0000',

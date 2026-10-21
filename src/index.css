@@ -18,6 +18,10 @@
   }
 
   :focus-visible {
-    @apply outline outline-2 outline-offset-2 outline-safety;
+    @apply outline outline-2 outline-offset-2 outline-graphite;
+  }
+
+  [data-fondo='oscuro'] :focus-visible {
+    @apply outline-white;
   }
 }
