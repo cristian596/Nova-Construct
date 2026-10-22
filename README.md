@@ -2,7 +2,7 @@
 
 Landing de una sola página para empresas de construcción y remodelación. Incluye: **hero** con foto, **servicios**, **cotizador preliminar** (calcula un rango en pesos), **proyectos** (carrusel de obras), **proceso** de trabajo (cinco etapas con íconos), **garantías** (tarjetas) y **contacto** con formulario y WhatsApp.
 
-Está hecha con React, Vite y Tailwind CSS. No necesita base de datos ni servidor: al compilarla se obtiene una carpeta de archivos estáticos (`dist`) que se sube a cualquier hosting.
+Está hecha con React, Vite y Tailwind CSS. No necesita base de datos ni servidor: al compilarla se obtiene una carpeta de archivos estáticos (`dist`) que se publica en Cloudflare Pages (ver sección 7).
 
 Todos los textos de la plantilla son de ejemplo. La marca aparece como **AQUI VA TU MARCA** hasta que la cambies (ver sección 4). Antes de publicar, lee la **[guía de cumplimiento](GUIA-CUMPLIMIENTO.md)** y ejecuta `npm run revisar` (sección 6).
 
@@ -40,7 +40,7 @@ Otros comandos disponibles:
 
 | Qué quieres cambiar | Dónde está |
 | --- | --- |
-| Nombre, eslogan, dominio, razón social, NIT, teléfono, dirección, horario, año de fundación, redes, colores | `src/data/marca.js` |
+| Nombre, eslogan, dominio, razón social, NIT, teléfono, dirección, horario, año de fundación, cifras del hero, redes, colores | `src/data/marca.js` |
 | Formulario de contacto (endpoint) | `src/data/contacto.js` |
 | Precios del cotizador (valores de ejemplo) | `src/data/cotizador.js` |
 | Proyectos del carrusel (valores de ejemplo) | `src/data/proyectos.js` |
@@ -50,7 +50,8 @@ Otros comandos disponibles:
 | Aviso de privacidad y política de tratamiento de datos | `src/pages/AvisoPrivacidad.jsx`, `src/pages/PoliticaTratamiento.jsx` |
 | SEO y redes sociales | `index.html` (título y descripción), `src/data/marca.js` (dominio y datos de empresa), `public/og-image.jpg` |
 | Revisión antes de publicar | `scripts/revisar.mjs` |
-| Guía legal para el comprador | `GUIA-CUMPLIMIENTO.md` |
+| Guía legal para el comprador (Ley 1581: consultas 10 días hábiles, reclamos 15) | `GUIA-CUMPLIMIENTO.md` |
+| Guía de despliegue en Cloudflare Pages | `DESPLIEGUE-CLOUDFLARE.md` |
 | Imágenes | `public/placeholders/` (hero) y `public/projects/` (proyectos) |
 
 ---
@@ -74,6 +75,7 @@ Todo lo que se repite en la web (nombre, teléfono, dirección…) está en **`s
 | `direccion` | Dirección **sin la ciudad** (se agrega sola desde `ciudad`). | Sección de contacto. |
 | `horario` | Horario de atención. | Sección de contacto. |
 | `anio_fundacion` | Año de fundación de tu empresa, solo el número. Lo pones tú: no hay un valor por defecto. | Hero: "Desde AAAA" en la línea de cota. Mientras esté pendiente, esa línea se oculta completa. |
+| `datosConfianza` | Tres cifras de la empresa (por ejemplo `25` años de experiencia). Las que digan `TODO` se ocultan; con menos de dos cifras, se oculta la fila. | Hero, bajo el eslogan. |
 | `redes` | Enlaces completos a tus perfiles: `instagram`, `facebook`, `linkedin`, `youtube`, `tiktok`. | Footer. Solo aparecen los que tengan enlace; los vacíos se ocultan. |
 | `correo` | Correo de contacto. | Aviso de privacidad y política de tratamiento (responsable y canal para ejercer derechos). |
 | `urlAvisoPrivacidad` | `'/aviso-de-privacidad'` (página interna) o una URL externa completa. | Enlace "Aviso de privacidad" del footer (ver 5.6). |
@@ -116,6 +118,7 @@ Además del nombre en `marca.js`, cambia el nombre en estos lugares, que no leen
 - **Titular**: `src/components/Hero.jsx`, lista `TITULAR`. Cada elemento es una línea del titular, y cada línea se anima por separado.
 - **Línea de cota naranja** ("Desde AAAA", donde AAAA es tu año de fundación): sale de `anio_fundacion` en `marca.js`. Si ese dato está pendiente, la línea completa (trazo, texto y extremos) no se muestra. Si prefieres otro dato (por ejemplo "+300 obras"), cambia `DATO_COTA` en `Hero.jsx`.
 - **Texto bajo el titular**: es el `eslogan` de `marca.js`.
+- **Cifras de la empresa**: salen de `datosConfianza` en `marca.js` y se muestran dentro del hero, bajo el eslogan. Las pendientes se omiten y, con menos de dos, se oculta la fila.
 - **Botones**: sus textos ("Cotizar mi proyecto", "Ver proyectos") están directamente en `Hero.jsx`.
 - **Palabra decorativa** del fondo: `palabraFondo` en `marca.js`.
 - **Foto**: archivo `public/placeholders/hero.webp`. La ruta se define en `Hero.jsx`, constante `IMAGEN_HERO`. La foto ocupa todo el ancho de la pantalla y se recorta para llenar el espacio, así que:
@@ -316,7 +319,7 @@ El dominio aparece en las etiquetas de SEO (`canonical`, `og:url`), en el mapa d
 
 Tienes tres caminos:
 
-1. **Para probar:** usa la dirección gratuita del hosting, por ejemplo `nombre.pages.dev` o `nombre.netlify.app`. Se escribe en `marca.js` y permite que el build funcione mientras terminas la configuración.
+1. **Para probar:** usa la dirección gratuita del hosting, por ejemplo `nombre.pages.dev` (la que da Cloudflare Pages). Se escribe en `marca.js` y permite que el build funcione mientras terminas la configuración.
 2. **Para publicar:** compra un dominio propio en un registrador, por ejemplo `.com` o `.co`, a nombre de la empresa compradora y con su correo.
 3. **Conectarlo:** el hosting te indica los registros DNS exactos. Los pasos están en [Conectar tu dominio propio](#conectar-tu-dominio-propio), dentro de la sección 7; no se repiten aquí.
 
@@ -333,8 +336,8 @@ dominio: 'https://constructoraandes.com', // ejemplo: pon tu dirección real
 1. Elegir la dirección de prueba o el dominio propio.
 2. Escribir esa dirección en `dominio` de `marca.js`.
 3. Ejecutar `npm run revisar` y corregir lo que bloquee.
-4. Desplegar (sección 7).
-5. Conectar el dominio propio en el hosting, si aplica.
+4. Desplegar en Cloudflare Pages (sección 7).
+5. Conectar el dominio propio en Cloudflare Pages, si aplica.
 6. Si la dirección de prueba cambió, poner el dominio final en `dominio` de `marca.js` y volver a desplegar.
 
 ### Si el dominio está pendiente
@@ -344,7 +347,7 @@ dominio: 'https://constructoraandes.com', // ejemplo: pon tu dirección real
 ### Renovación y cambios posteriores
 
 - El dominio se renueva cada año y **la empresa compradora paga la renovación**. Conviene que el correo de recuperación de la cuenta del registrador sea el de la empresa.
-- Si el dominio cambia después de publicar, agrega la nueva propiedad en Google Search Console (sección 8) y configura las redirecciones desde el dominio anterior en el hosting.
+- Si el dominio cambia después de publicar, agrega la nueva propiedad en Google Search Console (sección 8) y configura las redirecciones desde el dominio anterior en Cloudflare.
 
 ---
 
@@ -356,39 +359,25 @@ Esta web es estática. Se compila con:
 npm run publicar
 ```
 
-(revisa los datos pendientes y luego compila; también puedes usar solo `npm run build`, que igualmente exige que `dominio` esté completo en `marca.js`). Eso genera la carpeta **`dist`**, que es **la carpeta que se publica**. Hosting recomendado (ambos tienen plan gratuito): Netlify o Vercel. El proyecto no incluye configuración previa de ninguno, así que se indica en el panel de cada servicio. La web tiene una landing y las páginas `/aviso-de-privacidad` y `/politica-de-tratamiento-de-datos`, que se resuelven en el navegador; por eso el proyecto incluye `public/_redirects` (Netlify) y `vercel.json` (Vercel), que envían cualquier ruta a `index.html`. Sin ellos, abrir `/aviso-de-privacidad` directamente daría error 404. Si usas otro hosting, configura la misma regla.
+(revisa los datos pendientes y luego compila; también puedes usar solo `npm run build`, que igualmente exige que `dominio` esté completo en `marca.js`). Eso genera la carpeta **`dist`**, que es **la carpeta que se publica**.
 
-### Opción A: Netlify
+El hosting elegido es **Cloudflare Pages** (tiene plan gratuito). Los pasos para el comprador, escritos para una persona no técnica, están en **[DESPLIEGUE-CLOUDFLARE.md](DESPLIEGUE-CLOUDFLARE.md)**: conectar el repositorio de GitHub (recomendado), subir `dist` directamente, fijar la versión de Node, conectar el dominio propio, verificar y actualizar.
 
-1. Sube el proyecto a un repositorio de GitHub, GitLab o Bitbucket.
-2. En [netlify.com](https://www.netlify.com): **Add new site → Import an existing project** y elige el repositorio.
-3. Configura:
-   - **Build command:** `npm run build`
-   - **Publish directory:** `dist`
-4. Si el despliegue falla por la versión de Node, agrega la variable de entorno `NODE_VERSION` con valor `22`.
-5. Pulsa **Deploy**. En unos minutos tendrás una dirección temporal tipo `algo.netlify.app`.
+La web tiene una landing y las páginas `/aviso-de-privacidad` y `/politica-de-tratamiento-de-datos`, que se resuelven en el navegador. Por eso el proyecto incluye `public/_redirects`, que envía cualquier ruta a `index.html`, y `public/_headers`, que define el caché y las cabeceras de seguridad; Cloudflare Pages lee ambos. Sin `_redirects`, abrir `/aviso-de-privacidad` directamente daría error 404.
 
-*Alternativa sin repositorio:* ejecuta `npm run build` y arrastra la carpeta `dist` a la página [app.netlify.com/drop](https://app.netlify.com/drop).
+Configuración en Cloudflare Pages:
 
-### Opción B: Vercel
-
-1. Sube el proyecto a un repositorio de GitHub, GitLab o Bitbucket.
-2. En [vercel.com](https://vercel.com): **Add New → Project** e importa el repositorio.
-3. Vercel detecta Vite solo. Confirma:
-   - **Build command:** `npm run build`
-   - **Output directory:** `dist`
-4. Pulsa **Deploy**.
+- **Build command:** `npm run build`
+- **Build output directory:** `dist`
+- Si el despliegue falla por la versión de Node, agrega la variable de entorno `NODE_VERSION` con valor `22`.
 
 ### Conectar tu dominio propio
 
-1. Compra el dominio en un registrador (GoDaddy, Namecheap, Hostinger, Cloudflare, etc.).
-2. En el panel del hosting: **Domain settings → Add custom domain** (Netlify) o **Settings → Domains** (Vercel). Escribe tu dominio.
-3. El hosting te mostrará **los registros DNS exactos** que debes crear. No copies valores de otros tutoriales: usa los que te indique tu panel. Normalmente son:
-   - un registro **A** (o ALIAS/ANAME) para el dominio raíz (por ejemplo `midominio.com`);
-   - un registro **CNAME** para `www`.
-4. Entra al panel DNS de tu registrador y crea esos registros. Puede tardar desde unos minutos hasta 24 horas en funcionar.
-5. El hosting activa el certificado HTTPS (el candado) de forma automática cuando el dominio queda conectado.
-6. Cuando el dominio funcione, confirma que `dominio` en `marca.js` es ese mismo (sección 5.7) y vuelve a publicar: `index.html`, `robots.txt` y `sitemap.xml` se actualizan solos en el build.
+1. Compra el dominio en un registrador (GoDaddy, Namecheap, Cloudflare, etc.).
+2. En el proyecto de Cloudflare Pages, abre **Custom domains** y agrega tu dominio. Si el dominio ya está en Cloudflare, los registros DNS se crean solos; si está en otro registrador, Cloudflare te indica el registro exacto (normalmente un CNAME). Detalle en [DESPLIEGUE-CLOUDFLARE.md](DESPLIEGUE-CLOUDFLARE.md).
+3. Usa los valores que muestre tu panel; no copies los de otros tutoriales. Puede tardar desde unos minutos hasta 24 horas en funcionar.
+4. Cloudflare activa el certificado HTTPS (el candado) de forma automática.
+5. Cuando el dominio funcione, confirma que `dominio` en `marca.js` es ese mismo (sección 5.7) y vuelve a publicar: `index.html`, `robots.txt` y `sitemap.xml` se actualizan solos en el build.
 
 ---
 
@@ -407,11 +396,11 @@ Para aparecer en Google Maps y en búsquedas locales, crea además un perfil gra
 
 ## 9. Soporte y próximos pasos
 
-El soporte gratuito del proveedor dura 6 meses desde la entrega; el mantenimiento posterior se contrata aparte (ver `LICENSE.md`).
+El soporte gratuito del proveedor dura 6 meses desde la entrega, con respuesta en 48 horas hábiles; el mantenimiento posterior se contrata aparte (ver `LICENSE.md`, que fija también la conciliación en Facatativá, Cundinamarca).
 
 **Si algo se rompe:**
 
-1. **La web publicada se ve mal después de un cambio.** Vuelve a la versión anterior desde el panel de Netlify o Vercel (sección *Deploys*, opción de restaurar el despliegue anterior).
+1. **La web publicada se ve mal después de un cambio.** Vuelve a la versión anterior desde el panel de Cloudflare Pages (pestaña *Deployments*, opción de restaurar un despliegue anterior; verifica el nombre en el panel).
 2. **`npm run build` da error.** Lee el mensaje: casi siempre indica el archivo y la línea. Los errores más comunes son una comilla o llave sin cerrar en un archivo que editaste, o una coma que falta entre elementos de una lista.
 3. **Algún cambio no aparece.** Detén `npm run dev` con `Ctrl + C`, vuelve a ejecutarlo y recarga la página con `Ctrl + F5`.
 4. **Un comando no funciona.** Verifica `node -v` (mínimo 20.19) y que estás dentro de la carpeta del proyecto.
@@ -440,4 +429,4 @@ El soporte gratuito del proveedor dura 6 meses desde la entrega; el mantenimient
 
 ## Licencia
 
-El uso de este proyecto/código fuente está sujeto a los términos expresados en el archivo LICENSE.md adjunto. El soporte gratuito del proveedor dura 6 meses y el mantenimiento posterior se contrata aparte.
+El uso de este proyecto/código fuente está sujeto a los términos expresados en el archivo LICENSE.md adjunto. El soporte gratuito del proveedor dura 6 meses desde la entrega y el mantenimiento posterior se contrata aparte. La jurisdicción y el centro de conciliación (Facatativá, Cundinamarca) están en LICENSE.md.
