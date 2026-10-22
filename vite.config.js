@@ -1,11 +1,10 @@
-import { readFileSync, writeFileSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
+import { readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { MARCA, esPendiente } from './src/data/marca.js'
 
 const DOMINIO_EJEMPLO = 'https://tudominio.com'
-const SALIDA = (archivo) => fileURLToPath(new URL(`./dist/${archivo}`, import.meta.url))
 
 // Dominio de marca.js, validado: sin él (o con el de ejemplo) el build falla.
 function dominioDeMarca() {
@@ -48,26 +47,40 @@ function datosEstructurados(dominio) {
   return `<script type="application/ld+json">\n${json}\n    </script>`
 }
 
-// Dominio y JSON-LD salen solo de marca.js. En desarrollo no hace nada.
+// Build de demo (npm run demo): dominio propio y sin indexación. Lo activa scripts/build-demo.mjs.
+const DEMO = process.env.DEMO === 'true'
+const DEMO_DOMINIO = String(process.env.DEMO_DOMINIO ?? '').trim()
+
+// Dominio y JSON-LD salen solo de marca.js (o de DEMO_DOMINIO en la demo). En desarrollo no hace nada.
 function dominioYDatosEstructurados() {
   let dominio = ''
+  let carpetaSalida = ''
   return {
     name: 'dominio-y-datos-estructurados',
     apply: 'build',
+    configResolved(config) {
+      carpetaSalida = config.build.outDir
+    },
     buildStart() {
-      dominio = dominioDeMarca()
+      dominio = DEMO ? DEMO_DOMINIO : dominioDeMarca()
     },
     transformIndexHtml(html) {
-      return html
+      const conDominio = html
         .replaceAll(DOMINIO_EJEMPLO, dominio)
         .replace('<!-- JSON-LD generado en build -->', () => datosEstructurados(dominio))
+      return DEMO ? conDominio.replace('</head>', '  <meta name="robots" content="noindex, nofollow" />\n  </head>') : conDominio
     },
     closeBundle() {
       // Si el build falló (dominio pendiente), no hay dist que corregir.
       if (!dominio) return
+      const ruta = (archivo) => resolve(carpetaSalida, archivo)
+      if (DEMO) {
+        writeFileSync(ruta('robots.txt'), 'User-agent: *\nDisallow: /\n')
+        rmSync(ruta('sitemap.xml'), { force: true })
+        return
+      }
       for (const archivo of ['robots.txt', 'sitemap.xml']) {
-        const ruta = SALIDA(archivo)
-        writeFileSync(ruta, readFileSync(ruta, 'utf8').replaceAll(DOMINIO_EJEMPLO, dominio))
+        writeFileSync(ruta(archivo), readFileSync(ruta(archivo), 'utf8').replaceAll(DOMINIO_EJEMPLO, dominio))
       }
     },
   }

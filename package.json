@@ -10,7 +10,9 @@
     "imagenes": "node scripts/optimizar-imagenes.mjs",
     "og-image": "node scripts/generar-og-image.mjs",
     "revisar": "node scripts/revisar.mjs",
-    "publicar": "npm run revisar && npm run build"
+    "publicar": "npm run revisar && npm run build",
+    "demo": "node scripts/build-demo.mjs",
+    "capturas": "node scripts/capturas-demo.mjs"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",
