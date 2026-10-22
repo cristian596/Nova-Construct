@@ -48,6 +48,17 @@ EL CLIENTE declara conocer que para operar legalmente la Landing Page en Colombi
     *   Cambios de servidor o incompatibilidades en el entorno de hosting donde se instale.
     *   Cambios en APIs, scripts o librerías de terceros (ej. Google, Meta, servicios de email marketing).
 
+#### Soporte técnico
+*   **Duración:** EL PROVEEDOR ofrece soporte gratuito por 6 meses contados desde la entrega.
+*   **Cobertura:** El soporte cubre la corrección de errores originarios del código entregado y los problemas de compatibilidad del código con el entorno de despliegue indicado en la documentación.
+*   **Exclusiones del soporte:** Quedan excluidos:
+    *   Nuevas funcionalidades o rediseños solicitados por EL CLIENTE.
+    *   Fallas causadas por plugins o servicios de terceros instalados después de la entrega.
+    *   Modificaciones al código hechas por EL CLIENTE o por terceros no autorizados.
+    *   Cambios de contenido.
+*   **Tiempo de atención:** 48 horas hábiles para responder cada solicitud.
+*   **Después de los 6 meses:** El mantenimiento y las mejoras son opcionales y se pactan por separado.
+
 ---
 
 ### 6. LIMITACIÓN DE RESPONSABILIDAD
@@ -56,7 +67,7 @@ EL PROVEEDOR no responderá por pérdidas financieras, lucro cesante, interrupci
 ---
 
 ### 7. JURISDICCIÓN Y LEY APLICABLE
-Este contrato se rige íntegramente por las leyes de la República de Colombia. Cualquier controversia, reclamo o desacuerdo derivado de la interpretación o ejecución de este contrato se someterá en primera instancia a un arreglo directo entre las partes o a un centro de conciliación autorizado en la ciudad de Facatativa - Bogota.
+Este contrato se rige íntegramente por las leyes de la República de Colombia. Cualquier controversia derivada de este contrato será sometida en primera instancia a un arreglo directo entre las partes. De no lograrse un acuerdo en un plazo de quince (15) días hábiles, se acudirá a un Centro de Conciliación autorizado en la ciudad de Facatativá, Cundinamarca, Colombia, de conformidad con las leyes colombianas.
 
 ---
 

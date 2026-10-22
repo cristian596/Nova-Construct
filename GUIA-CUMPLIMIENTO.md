@@ -4,7 +4,7 @@
 
 Es una **orientación general** para que sepas qué debes revisar antes de publicar la landing. **No es asesoría legal** y no reemplaza el concepto de un abogado. Los textos legales de la plantilla (aviso de privacidad y política de tratamiento de datos) son **borradores**: **hazlos revisar por un abogado colombiano** antes de publicar, y vuelve a revisarlos cada vez que cambie tu operación.
 
-Tú, como comprador, eres quien publica el sitio y quien responde ante los clientes y ante las autoridades por lo que dice y por los datos que recoge. La licencia (`LICENSE.md`, sección 4) lo establece así.
+Tú, como comprador, eres quien publica el sitio y quien responde ante los clientes y ante las autoridades por lo que dice y por los datos que recoge. La licencia (`LICENSE.md`, sección 4) lo establece así. El soporte del proveedor y la garantía de la licencia están en `LICENSE.md`.
 
 ---
 
@@ -38,12 +38,14 @@ No quites ni precargues la casilla. Si cambias la política de forma importante,
 
 | Solicitud | Plazo | Prórroga |
 | --- | --- | --- |
-| **Consulta** (ver qué datos tienes de la persona) | 10 días hábiles | Hasta 5 días hábiles más, informando al titular el motivo y la nueva fecha. |
-| **Reclamo** (corregir, actualizar, suprimir o revocar) | 15 días hábiles | Hasta 8 días hábiles más, informando el motivo y la nueva fecha. |
+| **Consulta** (ver qué datos tienes de la persona) | 10 días hábiles | Si no es posible, hasta 5 días hábiles adicionales, informando al titular antes del vencimiento. |
+| **Reclamo** (corregir, actualizar, suprimir o revocar) | 15 días hábiles | Si no se puede responder en 15 días, hasta 8 días hábiles adicionales, informando la causa. |
 
-Si el reclamo llega incompleto, puedes pedirle al titular que lo complete dentro de los 5 días siguientes a recibirlo; si pasan 2 meses sin respuesta, se entiende que desistió. Mientras resuelves un reclamo, la ley exige marcar el dato con la leyenda "reclamo en trámite".
+Si el reclamo llega incompleto, se le pide al titular que lo complete dentro de los 5 días hábiles siguientes; si pasan 2 meses sin respuesta, se entiende que desistió. Mientras resuelves un reclamo, la ley exige marcar el dato con la leyenda "reclamo en trámite".
 
-**Otros puntos que debes revisar con tu abogado:** si tu empresa debe inscribir sus bases de datos en el Registro Nacional de Bases de Datos (RNBD) según sus activos; y que los mensajes por WhatsApp implican que los datos pasan por un servicio de un tercero (Meta), algo que conviene mencionar en la política.
+**Registro Nacional de Bases de Datos (RNBD).** El registro en el RNBD solo es obligatorio para personas jurídicas con activos totales superiores a 100.000 UVT. Estar exento no libera de cumplir la Ley 1581: la autorización previa, el aviso de privacidad y la política de tratamiento siguen siendo obligatorios.
+
+**Otros puntos que debes revisar con tu abogado:** que los mensajes por WhatsApp implican que los datos pasan por un servicio de un tercero (Meta), algo que conviene mencionar en la política.
 
 ---
 

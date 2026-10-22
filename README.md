@@ -407,6 +407,8 @@ Para aparecer en Google Maps y en búsquedas locales, crea además un perfil gra
 
 ## 9. Soporte y próximos pasos
 
+El soporte gratuito del proveedor dura 6 meses desde la entrega; el mantenimiento posterior se contrata aparte (ver `LICENSE.md`).
+
 **Si algo se rompe:**
 
 1. **La web publicada se ve mal después de un cambio.** Vuelve a la versión anterior desde el panel de Netlify o Vercel (sección *Deploys*, opción de restaurar el despliegue anterior).
@@ -438,4 +440,4 @@ Para aparecer en Google Maps y en búsquedas locales, crea además un perfil gra
 
 ## Licencia
 
-El uso de este proyecto/código fuente está sujeto a los términos expresados en el archivo LICENSE.md adjunto.
+El uso de este proyecto/código fuente está sujeto a los términos expresados en el archivo LICENSE.md adjunto. El soporte gratuito del proveedor dura 6 meses y el mantenimiento posterior se contrata aparte.

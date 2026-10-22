@@ -72,8 +72,15 @@ const secciones = [
     titulo: 'Procedimiento para consultas y reclamos',
     contenido: (
       <ul className={listaTexto}>
-        <li>Las consultas se responden en un plazo máximo de 10 días hábiles.</li>
-        <li>Los reclamos se responden en un plazo máximo de 15 días hábiles.</li>
+        <li>
+          Las consultas se responden en un plazo de 10 días hábiles. Si no es posible, se pueden prorrogar hasta 5
+          días hábiles adicionales, informando al titular antes del vencimiento.
+        </li>
+        <li>
+          Los reclamos se responden en un plazo de 15 días hábiles. Si el reclamo está incompleto, se pide al titular
+          que lo complete dentro de los 5 días hábiles siguientes. Si no se puede responder en 15 días, se amplía
+          hasta 8 días hábiles adicionales, informando la causa.
+        </li>
       </ul>
     ),
   },
