@@ -6,7 +6,7 @@
 ---
 
 ### 1. PARTES Y OBJETO DEL CONTRATO
-El presente documento regula los términos y condiciones de venta, licenciamiento de software y derechos de autor aplicables al desarrollo web tipo *Landing Page* (en adelante, "EL SOFTWARE" o "LA PLANTILLA"), comercializado por Cristian Camilo Higuera Carrillo (en adelante, "EL PROVEEDOR"), identificado con CC N° 1007510092, a favor del comprador o adquirente (en adelante, "EL CLIENTE").
+El presente documento regula los términos y condiciones de venta, licenciamiento de software y derechos de autor aplicables al desarrollo web tipo *Landing Page*,comercializado por Cristian Camilo Higuera Carrillo, identificado con CC N° 1007510092, a favor del comprador o adquirente.
 
 Al adquirir, descargar, instalar o desplegar EL SOFTWARE, EL CLIENTE acepta expresamente las condiciones contenidas en este contrato.
 
