@@ -68,6 +68,12 @@ export const MARCA = {
   // este valor por la URL completa (https://...).
   urlPoliticaDatos: '/politica-de-tratamiento-de-datos',
 
+  // TODO: ID de medición de Google Analytics 4 (formato G-XXXXXXXXXX). La propiedad debe ser de la
+  // empresa compradora, creada en Google Analytics 4 con su propia cuenta de Google. Mientras esté
+  // pendiente (o no empiece con "G-"), no se muestra el banner de cookies ni se carga Analytics.
+  // El script de Google solo se carga después de que el visitante acepta el banner.
+  googleAnalyticsId: 'TODO: G-XXXXXXXXXX',
+
   // TODO: actualizar cada vez que se revise el texto
   fechaPolitica: '2026-10-21',
 

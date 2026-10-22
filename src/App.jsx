@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Header from './components/Header.jsx'
 import Footer from './components/Footer.jsx'
+import BannerCookies from './components/BannerCookies.jsx'
 import Inicio from './pages/Inicio.jsx'
 import { RUTA_AVISO, RUTA_POLITICA } from './lib/aviso.js'
 
@@ -39,6 +40,7 @@ export default function App() {
         <Route path="*"element={<Navigate to="/" replace />} />
       </Routes>
       <Footer />
+      <BannerCookies />
     </>
   )
 }

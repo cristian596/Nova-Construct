@@ -36,6 +36,9 @@ const OPCIONALES = [
 for (const [campo, efecto] of OPCIONALES) {
   if (esPendiente(MARCA[campo])) avisos.push(`src/data/marca.js: "${campo}" pendiente (${efecto}).`)
 }
+if (esPendiente(MARCA.googleAnalyticsId) || !String(MARCA.googleAnalyticsId).trim().startsWith('G-')) {
+  avisos.push('src/data/marca.js: "googleAnalyticsId" pendiente o sin formato "G-" (sin banner de cookies ni analítica).')
+}
 const cifrasPendientes = MARCA.datosConfianza.filter((dato) => esPendiente(dato.valor)).length
 if (cifrasPendientes > 0) {
   avisos.push(`src/data/marca.js: ${cifrasPendientes} de ${MARCA.datosConfianza.length} cifras de "datosConfianza" pendientes (se ocultan; con menos de dos se oculta la fila).`)

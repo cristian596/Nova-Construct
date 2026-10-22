@@ -37,7 +37,7 @@ EL CLIENTE asume la responsabilidad legal directa sobre los contenidos presentad
 EL CLIENTE declara conocer que para operar legalmente la Landing Page en Colombia debe:
 1.  **Protección de Datos (Ley 1581 de 2012):** Incluir y vincular su propia *Política de Tratamiento de Datos Personales* en los formularios de captura y mantener casillas de autorización expresas.
 2.  **Publicidad Veraz (Ley 1480 de 2011 - Estatuto del Consumidor):** Garantizar que las promociones, imágenes y ofertas publicadas correspondan a la realidad comercial de su empresa.
-3.  **Cookies e Identificación:** Informar el uso de tecnologías de rastreo y publicar su Razón Social / NIT visible en el sitio web.
+3.  **Cookies e Identificación:** Informar el uso de tecnologías de rastreo y publicar su Razón Social / NIT visible en el sitio web. LA PLANTILLA incluye una integración opcional con Google Analytics 4 que solo se activa cuando EL CLIENTE configura su propio ID de medición y que carga el script de Google únicamente después de que el visitante acepta el banner de cookies. La propiedad de Google Analytics debe ser de EL CLIENTE, quien es el responsable del tratamiento de los datos de analítica y de mantener actualizados el banner y sus textos legales.
 
 ---
 

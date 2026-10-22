@@ -1,5 +1,6 @@
 import { CONTACTO, enlaceWhatsApp } from '../data/contacto.js'
 import { MARCA, esPendiente } from '../data/marca.js'
+import { analiticaDisponible } from '../lib/analitica.js'
 import PaginaLegal, { DatosResponsable, enlaceTexto, listaTexto } from '../components/PaginaLegal.jsx'
 
 // BORRADOR: Texto de ejemplo. Debe revisarlo un abogado antes de publicar.
@@ -29,6 +30,25 @@ const secciones = [
     ),
   },
   {
+    titulo: 'Cookies y analítica',
+    contenido: analiticaDisponible() ? (
+      <>
+        <p>
+          Este sitio usa Google Analytics 4, un servicio de Google, para entender cómo se usa (páginas visitadas,
+          tiempo de visita y tipo de dispositivo). Para ello, Google puede instalar cookies en su navegador y recibir
+          datos de uso, que pueden ser tratados fuera de Colombia.
+        </p>
+        <p>
+          Solo se activa si usted pulsa «Aceptar» en el banner de cookies. Si pulsa «Rechazar», no se carga ningún
+          script de Google ni se crean cookies de análisis. Guardamos su elección en el almacenamiento local de su
+          navegador. Puede cambiarla borrando los datos del sitio en su navegador; el banner volverá a aparecer.
+        </p>
+      </>
+    ) : (
+      <p>Este sitio no usa cookies de análisis ni de publicidad.</p>
+    ),
+  },
+  {
     titulo: 'Finalidades',
     contenido: (
       <>
@@ -36,6 +56,7 @@ const secciones = [
         <ul className={listaTexto}>
           <li>Responder sus solicitudes de cotización.</li>
           <li>Responder sus mensajes y contactarlo por teléfono o WhatsApp.</li>
+          {analiticaDisponible() && <li>Medir y mejorar el uso del sitio, solo si usted acepta las cookies de análisis.</li>}
         </ul>
       </>
     ),

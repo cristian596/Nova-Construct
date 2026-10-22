@@ -48,6 +48,7 @@ Otros comandos disponibles:
 | Opciones del menú de navegación | `src/data/secciones.js` |
 | Textos del hero, servicios y proceso | `src/components/Hero.jsx`, `Servicios.jsx`, `Proceso.jsx` |
 | Aviso de privacidad y política de tratamiento de datos | `src/pages/AvisoPrivacidad.jsx`, `src/pages/PoliticaTratamiento.jsx` |
+| Google Analytics y banner de cookies | `googleAnalyticsId` en `src/data/marca.js`, `src/lib/analitica.js`, `src/components/BannerCookies.jsx` |
 | SEO y redes sociales | `index.html` (título y descripción), `src/data/marca.js` (dominio y datos de empresa), `public/og-image.jpg` |
 | Revisión antes de publicar | `scripts/revisar.mjs` |
 | Guía legal para el comprador (Ley 1581: consultas 10 días hábiles, reclamos 15) | `GUIA-CUMPLIMIENTO.md` |
@@ -80,6 +81,7 @@ Todo lo que se repite en la web (nombre, teléfono, dirección…) está en **`s
 | `correo` | Correo de contacto. | Aviso de privacidad y política de tratamiento (responsable y canal para ejercer derechos). |
 | `urlAvisoPrivacidad` | `'/aviso-de-privacidad'` (página interna) o una URL externa completa. | Enlace "Aviso de privacidad" del footer (ver 5.6). |
 | `urlPoliticaDatos` | `'/politica-de-tratamiento-de-datos'` (página interna) o una URL externa completa. | Enlace "Política de tratamiento de datos" del footer y del formulario. |
+| `googleAnalyticsId` | ID de medición de Google Analytics 4 (`G-XXXXXXXXXX`), de una propiedad **de la empresa compradora**. Opcional. | Activa el banner de cookies y la analítica (ver 5.10). Pendiente = sin banner y sin cookies. |
 | `fechaPolitica` y `versionPolitica` | Fecha `AAAA-MM-DD` y versión de la política de tratamiento. | La fecha se muestra en la política; la versión viaja en el mensaje de WhatsApp con la autorización. |
 | `avisoPrivacidadActualizado` | Fecha `AAAA-MM-DD` de la última revisión del aviso. | Sección "Vigencia" del aviso de privacidad. |
 
@@ -275,6 +277,23 @@ y se asigna en `tailwind.config.js` (`fontFamily.sans`).
 2. En `tailwind.config.js`, cambia `Archivo` por el nombre de tu fuente en `fontFamily.sans`.
 3. Los titulares usan las clases `ancho-condensado`, `ancho-semi` y `ancho-normal` (definidas al final de `tailwind.config.js`), que modifican el **ancho** de la letra. Eso solo funciona con fuentes que tengan eje de ancho (`wdth`), como Archivo. Con otra fuente esas clases no tendrán efecto y los titulares se verán más anchos de lo diseñado; revisa el resultado.
 
+### 5.10 Google Analytics y banner de cookies
+
+La plantilla trae Google Analytics 4 **apagado**. Para activarlo:
+
+1. Crea una propiedad en [Google Analytics](https://analytics.google.com) con una cuenta **de la empresa** y copia el ID de medición (`G-XXXXXXXXXX`).
+2. Pégalo en `googleAnalyticsId` de `src/data/marca.js`.
+3. Vuelve a publicar.
+
+Cómo funciona (`src/lib/analitica.js` y `src/components/BannerCookies.jsx`):
+
+- Con un ID válido (no pendiente y que empiece con `G-`), aparece un banner fijo abajo con «Aceptar» y «Rechazar».
+- El script de Google **no está en `index.html`**: se crea en el navegador solo después de «Aceptar». «Rechazar» no carga nada ni crea cookies.
+- La elección se guarda en `localStorage` con la clave `consentimiento-analitica` (`aceptado` o `rechazado`). Si el visitante ya aceptó, Analytics se carga al abrir la página sin mostrar el banner. Si `localStorage` no está disponible, el banner aparece en cada visita y el sitio sigue funcionando.
+- El aviso de privacidad y la política de tratamiento muestran la sección «Cookies y analítica» según este ajuste. Que un abogado la revise.
+
+Para probarlo en local: pon un ID, ejecuta `npm run dev`, abre la web, acepta y verifica en la pestaña *Network* del navegador la petición a `googletagmanager.com`. Borra `consentimiento-analitica` en *Application → Local Storage* para ver el banner de nuevo.
+
 ---
 
 ## 6. Antes de publicar
@@ -405,7 +424,7 @@ El soporte gratuito del proveedor dura 6 meses desde la entrega, con respuesta e
 3. **Algún cambio no aparece.** Detén `npm run dev` con `Ctrl + C`, vuelve a ejecutarlo y recarga la página con `Ctrl + F5`.
 4. **Un comando no funciona.** Verifica `node -v` (mínimo 20.19) y que estás dentro de la carpeta del proyecto.
 
-**Próximos pasos sugeridos:** agregar tus fotos reales, conectar el formulario a un endpoint, hacer revisar los textos legales por un abogado, abrir el perfil de Google Business y medir visitas con una herramienta de analítica de tu preferencia.
+**Próximos pasos sugeridos:** agregar tus fotos reales, conectar el formulario a un endpoint, hacer revisar los textos legales por un abogado, abrir el perfil de Google Business y medir visitas con Google Analytics (ver 5.10).
 
 ---
 

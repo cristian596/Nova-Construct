@@ -1,5 +1,6 @@
 import { enlaceWhatsApp } from '../data/contacto.js'
 import { MARCA, esPendiente } from '../data/marca.js'
+import { analiticaDisponible } from '../lib/analitica.js'
 import PaginaLegal, { DatosResponsable, enlaceTexto, listaTexto } from '../components/PaginaLegal.jsx'
 
 // BORRADOR: Texto de ejemplo. Debe revisarlo un abogado antes de publicar.
@@ -51,6 +52,26 @@ const secciones = [
         conservar la información podemos apoyarnos en proveedores de servicios tecnológicos, como alojamiento web,
         base de datos o mensajería, que actúan por nuestra cuenta.
       </p>
+    ),
+  },
+  {
+    titulo: 'Cookies y analítica',
+    contenido: analiticaDisponible() ? (
+      <>
+        <p>
+          Con su autorización usamos Google Analytics 4, un servicio de Google, para medir el uso del sitio. Google
+          puede instalar cookies en su navegador y tratar datos de navegación (por ejemplo, páginas visitadas,
+          dispositivo y navegador), incluso en servidores fuera de Colombia (transferencia internacional de datos).
+        </p>
+        <p>
+          El script de Google solo se carga si usted pulsa «Aceptar» en el banner. Si pulsa «Rechazar», no se carga
+          ni se crean cookies de análisis. Su elección se guarda en el almacenamiento local de su navegador y puede
+          cambiarla borrando los datos del sitio; el banner volverá a aparecer. Puede revocar su autorización en
+          cualquier momento.
+        </p>
+      </>
+    ) : (
+      <p>Este sitio no usa cookies de análisis ni de publicidad.</p>
     ),
   },
   {

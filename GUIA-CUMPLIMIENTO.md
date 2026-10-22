@@ -45,6 +45,15 @@ Si el reclamo llega incompleto, se le pide al titular que lo complete dentro de 
 
 **Registro Nacional de Bases de Datos (RNBD).** El registro en el RNBD solo es obligatorio para personas jurídicas con activos totales superiores a 100.000 UVT. Estar exento no libera de cumplir la Ley 1581: la autorización previa, el aviso de privacidad y la política de tratamiento siguen siendo obligatorios.
 
+**Cookies y Google Analytics.** La plantilla trae Google Analytics 4 **apagado**. Se activa solo cuando pones tu ID de medición en `googleAnalyticsId` (`src/data/marca.js`). Entonces:
+
+- aparece un **banner de consentimiento** (`src/components/BannerCookies.jsx`) con los botones «Aceptar» y «Rechazar», que enlaza la política de tratamiento;
+- el script de Google **no está en `index.html`**: se carga solo después de que el visitante pulsa «Aceptar». Si rechaza, no se carga nada y no se crean cookies;
+- la elección se guarda en el navegador del visitante (`localStorage`, clave `consentimiento-analitica`);
+- el aviso de privacidad y la política de tratamiento incluyen la sección «Cookies y analítica» (y mencionan a Google y la posible transferencia internacional de datos). Si `googleAnalyticsId` está pendiente, esas secciones dicen que el sitio no usa cookies de análisis.
+
+La propiedad de Google Analytics debe ser **de tu empresa** (créala en [analytics.google.com](https://analytics.google.com) con una cuenta de la empresa), no del proveedor de la plantilla: tú eres el responsable de esos datos. No cargues Analytics por otra vía (por ejemplo, pegando el script en `index.html`), porque eso se saltaría el consentimiento. Pide a tu abogado que confirme los textos de cookies y la transferencia internacional.
+
 **Otros puntos que debes revisar con tu abogado:** que los mensajes por WhatsApp implican que los datos pasan por un servicio de un tercero (Meta), algo que conviene mencionar en la política.
 
 ---
@@ -71,7 +80,7 @@ Ejecuta `npm run revisar`: encuentra automáticamente muchos de estos puntos (lo
 - [ ] Imágenes de ejemplo reemplazadas por fotos reales, o rotuladas como ilustraciones.
 - [ ] Precios (`cotizador.js`) y garantías (`garantias.js`) confirmados, y el comentario "Valores de ejemplo" retirado de esos archivos.
 - [ ] Proyectos (`proyectos.js`) reemplazados por obras reales.
-- [ ] Si usas cookies o analítica, información al visitante sobre su uso (la plantilla no instala ninguna por sí sola).
+- [ ] Si usas Google Analytics: `googleAnalyticsId` con el ID de **tu** propiedad GA4 (empieza con `G-`), banner de cookies probado (aceptar carga Analytics; rechazar no carga nada) y sección «Cookies y analítica» revisada por tu abogado. Si no lo usas, déjalo pendiente: no se instala ninguna cookie.
 
 ---
 
