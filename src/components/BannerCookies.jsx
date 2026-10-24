@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { MARCA } from '../data/marca.js'
 import {
@@ -9,7 +9,7 @@ import {
   rechazar,
 } from '../lib/analitica.js'
 import { POLITICA_EXTERNA } from '../lib/aviso.js'
-import { botonPrimario, botonSecundario } from '../lib/ui.js'
+import { botonSecundario } from '../lib/ui.js'
 
 const CLASE_ENLACE = 'underline underline-offset-4 hover:text-concrete'
 
@@ -17,38 +17,73 @@ const CLASE_ENLACE = 'underline underline-offset-4 hover:text-concrete'
 const claveDesactivar = () => `ga-disable-${String(MARCA.googleAnalyticsId).trim()}`
 
 export default function BannerCookies() {
-  const [visible, setVisible] = useState(() => analiticaDisponible() && leerConsentimiento() === null)
+  const disponible = analiticaDisponible()
+  const [visible, setVisible] = useState(() => disponible && leerConsentimiento() === null)
+  // Decisión vigente: se muestra en el banner cuando el visitante lo abre para cambiarla.
+  const [decision, setDecision] = useState(() => (disponible ? leerConsentimiento() : null))
   // Solo se muestra cuando el visitante pasa de "aceptado" a "rechazado" sin recargar.
   const [pedirRecarga, setPedirRecarga] = useState(false)
+  const primerBoton = useRef(null)
+  const origen = useRef(null)
+  const abiertoPorUsuario = useRef(false)
 
+  // Con el ID pendiente el banner se puede abrir desde el footer, pero no guarda ni carga nada.
   useEffect(() => {
-    if (!analiticaDisponible()) return undefined
     const abrir = () => {
+      origen.current = document.activeElement
+      abiertoPorUsuario.current = true
+      setDecision(disponible ? leerConsentimiento() : null)
       setPedirRecarga(false)
       setVisible(true)
     }
     window.addEventListener(EVENTO_CONFIGURAR_COOKIES, abrir)
     return () => window.removeEventListener(EVENTO_CONFIGURAR_COOKIES, abrir)
-  }, [])
+  }, [disponible])
+
+  // Al abrirlo desde el footer, el foco va al primer botón del banner.
+  useEffect(() => {
+    if (visible && abiertoPorUsuario.current) primerBoton.current?.focus()
+  }, [visible])
+
+  const cerrar = () => {
+    setVisible(false)
+    setPedirRecarga(false)
+    if (abiertoPorUsuario.current) origen.current?.focus?.()
+    abiertoPorUsuario.current = false
+  }
+
+  // Escape cierra solo si ya hay una decisión guardada (o si no hay Analytics que decidir).
+  const puedeCerrar = !disponible || decision !== null
+  useEffect(() => {
+    if (!visible || !puedeCerrar) return undefined
+    const alTeclear = (evento) => {
+      if (evento.key === 'Escape') cerrar()
+    }
+    window.addEventListener('keydown', alTeclear)
+    return () => window.removeEventListener('keydown', alTeclear)
+  }, [visible, puedeCerrar])
 
   if (!visible) return null
 
   const elegirAceptar = () => {
+    if (!disponible) return cerrar()
     window[claveDesactivar()] = false
     aceptar() // guarda la elección y carga Analytics si aún no estaba cargado
-    setPedirRecarga(false)
-    setVisible(false)
+    setDecision('aceptado')
+    return cerrar()
   }
 
   const elegirRechazar = () => {
+    if (!disponible) return cerrar()
     const veniaAceptado = leerConsentimiento() === 'aceptado'
     rechazar()
+    setDecision('rechazado')
     if (veniaAceptado) {
       window[claveDesactivar()] = true
       setPedirRecarga(true)
-      return
+      return undefined
     }
-    setVisible(false)
+    return cerrar()
   }
 
   return (
@@ -71,13 +106,18 @@ export default function BannerCookies() {
             </Link>
           )}
           .
+          {decision && (
+            <span className="mt-2 block text-sm text-concrete">
+              Tu decisión actual: {decision === 'aceptado' ? 'cookies aceptadas' : 'cookies rechazadas'}.
+            </span>
+          )}
         </p>
         <div className="flex flex-col gap-3 md:shrink-0">
           <div className="flex flex-col gap-3 sm:flex-row">
-            <button type="button" onClick={elegirRechazar} className={botonSecundario}>
+            <button ref={primerBoton} type="button" onClick={elegirRechazar} className={botonSecundario}>
               Rechazar
             </button>
-            <button type="button" onClick={elegirAceptar} className={botonPrimario}>
+            <button type="button" onClick={elegirAceptar} className={botonSecundario}>
               Aceptar
             </button>
           </div>

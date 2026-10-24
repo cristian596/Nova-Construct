@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { MARCA, esPendiente } from '../data/marca.js'
 import { SECCIONES } from '../data/secciones.js'
-import { abrirConfiguracionCookies, analiticaDisponible } from '../lib/analitica.js'
+import { abrirConfiguracionCookies } from '../lib/analitica.js'
 import { AVISO_EXTERNO, POLITICA_EXTERNA } from '../lib/aviso.js'
 import { contenedor } from '../lib/ui.js'
 import Logo from './Logo.jsx'
@@ -95,11 +95,9 @@ export default function Footer() {
                 Política de tratamiento de datos
               </Link>
             )}
-            {analiticaDisponible() && (
-              <button type="button" onClick={abrirConfiguracionCookies} className={`${CLASE_AVISO} text-left`}>
-                Configurar cookies
-              </button>
-            )}
+            <button type="button" onClick={abrirConfiguracionCookies} className={`${CLASE_AVISO} text-left`}>
+              Configurar cookies
+            </button>
           </div>
         </div>
       </div>
