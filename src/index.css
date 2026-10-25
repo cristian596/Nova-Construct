@@ -4,7 +4,7 @@
 
 @layer base {
   html {
-    @apply scroll-pt-20 bg-white text-graphite antialiased;
+    @apply scroll-pt-20 bg-concrete text-graphite antialiased;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -23,5 +23,10 @@
 
   [data-fondo='oscuro'] :focus-visible {
     @apply outline-white;
+  }
+
+  /* Superficie clara dentro de un fondo oscuro (por ejemplo, el resultado del cotizador). */
+  [data-fondo='claro'] :focus-visible {
+    @apply outline-graphite;
   }
 }

@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { ANCHOS_PROYECTO, PROYECTOS } from '../data/proyectos.js'
-import { contenedor, tituloSeccion } from '../lib/ui.js'
-import Cota from './Cota.jsx'
+import { contenedor, entradilla, tituloSeccion } from '../lib/ui.js'
+import { useRevelar } from '../lib/revelar.js'
 import ImagenResponsiva from './ImagenResponsiva.jsx'
 
-// Mismo margen que `contenedor` (max-w-7xl centrado), aplicado al carril con scroll
-// para que el primer proyecto quede alineado con el título. En escritorio (lg) el carril
-// deja media pantalla menos media tarjeta a cada lado para que cualquier tarjeta pueda quedar al centro.
-const ALINEACION = 'px-4 scroll-px-4 sm:px-8 sm:scroll-px-8 lg:px-[calc(50%-11rem)] lg:scroll-px-0'
+// En móvil y tableta el carril sale hasta el borde de la pantalla (cancela el margen de `contenedor`)
+// y alinea cada tarjeta con el margen del título. En escritorio (lg) cada tarjeta ocupa todo el carril.
+const ALINEACION = '-mx-4 px-4 scroll-px-4 sm:-mx-6 sm:px-6 sm:scroll-px-6 lg:mx-0 lg:px-0 lg:scroll-px-0'
 
 const PAUSAS_INICIALES = { hover: false, foco: false, toque: false, fuera: true, pestana: false }
 
@@ -38,57 +37,37 @@ function indiceActivo(pista) {
   return mejor
 }
 
-// Marco 4:5 que se conserva aunque la imagen falle: queda el fondo cement y la leyenda de abajo.
-// Etiqueta, degradado y marco son decorativos (aria-hidden): la misma información está en la leyenda.
-function ImagenProyecto({ src, alt, tipo, m2, semanas, activo, pausado }) {
+// Marco que se conserva aunque la imagen falle: queda el fondo cement y los datos de la tarjeta.
+function ImagenProyecto({ src, alt }) {
   const [fallo, setFallo] = useState(false)
-  // En línea: el shorthand `animation` de las clases animate-* reinicia animation-play-state.
-  const estiloPausa = { animationPlayState: pausado ? 'paused' : 'running' }
 
   return (
-    <div
-      className="relative aspect-[4/5] w-full overflow-hidden bg-cement"
-      {...(fallo && { role: 'img', 'aria-label': alt })}
-    >
+    <div className="absolute inset-0 bg-cement" {...(fallo && { role: 'img', 'aria-label': alt })}>
       {!fallo && (
         <ImagenResponsiva
           src={src}
           anchos={ANCHOS_PROYECTO}
-          sizes="(min-width: 1024px) 22rem, min(78vw, 20rem)"
+          sizes="(min-width: 1024px) 60vw, 82vw"
           alt={alt}
           width="960"
           height="1200"
           loading="lazy"
           onError={() => setFallo(true)}
-          style={estiloPausa}
-          className={`size-full object-cover ${activo ? 'motion-safe:animate-zoom-activo' : ''}`}
+          className="size-full object-cover"
         />
       )}
-
-      <span
-        aria-hidden="true"
-        className={`absolute left-0 top-0 z-10 bg-safety px-3 py-1 text-sm font-semibold text-graphite ${activo ? 'motion-safe:animate-entrada' : ''}`}
-      >
-        {tipo}
-      </span>
-
-      <div
-        aria-hidden="true"
-        className={`absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-graphite via-graphite/70 to-transparent px-4 pb-4 pt-16 text-sm font-semibold tabular-nums text-white transition-opacity duration-300 group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none ${activo ? 'opacity-100 motion-safe:animate-entrada' : 'opacity-0'}`}
-      >
-        {m2} m² · {semanas} semanas
-      </div>
-
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-20 border border-transparent group-focus-within:border-graphite"
-      />
     </div>
   )
 }
 
+// Sin proyectos no hay sección (el header, el footer y el hero también ocultan su enlace).
 export default function Proyectos() {
+  return PROYECTOS.length > 0 ? <Galeria /> : null
+}
+
+function Galeria() {
   const seccionRef = useRef(null)
+  const cabeceraRef = useRevelar()
   const pistaRef = useRef(null)
   const objetivoRef = useRef(null)
   const temporizadorRef = useRef(0)
@@ -209,134 +188,118 @@ export default function Proyectos() {
   }
 
   return (
-    <section
-      ref={seccionRef}
-      id="proyectos"
-      aria-labelledby="proyectos-titulo"
-      className="overflow-hidden bg-concrete py-20 lg:py-28"
-    >
+    <section ref={seccionRef} id="proyectos" aria-labelledby="proyectos-titulo" className="overflow-hidden pb-24 lg:pb-40">
       <div className={contenedor}>
-        <div className="max-w-2xl">
-          <h2 id="proyectos-titulo" className={tituloSeccion}>
+        <div ref={cabeceraRef} className="mx-auto max-w-2xl text-center">
+          <h2 id="proyectos-titulo" data-revelar className={tituloSeccion}>
             Obras entregadas
           </h2>
-          <p className="mt-5 text-lg leading-relaxed">
+          <p data-revelar className={`${entradilla} mt-6`}>
             Área, tipo de trabajo y tiempo real de ejecución de cada proyecto.
           </p>
         </div>
 
-        <Cota valor={`${PROYECTOS.length} proyectos`} className="mt-10 lg:mt-14" />
-      </div>
+        <div className="mt-12 grid gap-8 lg:mt-20 lg:grid-cols-12 lg:gap-10">
+          <div className="order-last flex flex-col gap-6 lg:order-none lg:col-span-4 lg:justify-between">
+            <nav aria-label="Elegir proyecto">
+              <ul className="flex flex-wrap gap-2 lg:flex-col lg:flex-nowrap lg:gap-1">
+                {PROYECTOS.map((proyecto, i) => (
+                  <li key={proyecto.nombre}>
+                    <button
+                      type="button"
+                      onClick={() => irA(i)}
+                      aria-current={i === activo ? 'true' : undefined}
+                      className={`flex min-h-11 w-full flex-col items-start rounded-2xl px-4 py-2 text-left transition-[background-color,transform] duration-200 motion-safe:active:scale-[0.98] motion-reduce:transition-none lg:px-5 lg:py-3 ${
+                        i === activo ? 'bg-white' : 'hover:bg-white/60'
+                      }`}
+                    >
+                      <span className="break-words font-medium lg:text-xl lg:font-light lg:tracking-[-0.01em]">{proyecto.nombre}</span>
+                      <span className="hidden text-sm lg:block">{proyecto.tipo}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
 
-      <div
-        ref={pistaRef}
-        role="region"
-        aria-label="Galería de proyectos, desplazable horizontalmente"
-        tabIndex={0}
-        onKeyDown={alTecla}
-        onFocus={alEnfocar}
-        onBlur={alDesenfocar}
-        onPointerEnter={(e) => e.pointerType === 'mouse' && marcar('hover', true)}
-        onPointerLeave={() => marcar('hover', false)}
-        onPointerDown={() => {
-          cancelarObjetivo()
-          marcar('toque', true)
-        }}
-        onTouchStart={() => {
-          cancelarObjetivo()
-          marcar('toque', true)
-        }}
-        onWheel={cancelarObjetivo}
-        className={`relative mt-8 snap-x snap-mandatory overflow-x-auto overscroll-x-contain pb-6 pt-2 ${ALINEACION} [scrollbar-color:#8B8F94_transparent] [scrollbar-width:thin]`}
-      >
-        <ul className="flex w-max gap-6">
-          {PROYECTOS.map((proyecto, i) => {
-            const esActivo = i === activo
-            return (
-              <li key={proyecto.nombre} className="w-[min(78vw,20rem)] shrink-0 snap-start lg:w-[22rem] lg:snap-center">
-                <figure
-                  tabIndex={0}
-                  className={`group transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,0.61,0.36,1)] motion-reduce:transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safety ${esActivo ? 'scale-100 opacity-100' : 'scale-[0.96] opacity-75'}`}
-                >
-                  <ImagenProyecto
-                    src={proyecto.imagen}
-                    alt={proyecto.alt}
-                    tipo={proyecto.tipo}
-                    m2={proyecto.m2}
-                    semanas={proyecto.semanas}
-                    activo={esActivo}
-                    pausado={enPausa}
+            {!reducido && (
+              <div className="flex items-center gap-4">
+                <div aria-hidden="true" className="h-1 flex-1 overflow-hidden rounded-full bg-graphite/15">
+                  <div
+                    key={`${activo}-${ciclo}`}
+                    onAnimationEnd={() => irA((activo + 1) % PROYECTOS.length)}
+                    style={{ animationPlayState: enPausa ? 'paused' : 'running' }}
+                    className="h-full origin-left rounded-full bg-safety motion-safe:animate-progreso"
                   />
-                  {/* graphite y no cement: cement sobre concrete da 2,8:1 y no cumple AA. */}
-                  <p className="mt-2 text-xs text-graphite">Ilustración de ejemplo</p>
-                  <figcaption className="mt-3 border-t border-graphite pt-4">
-                    <h3 className="ancho-semi text-2xl font-bold leading-tight">{proyecto.nombre}</h3>
-                    <dl className={`mt-3 flex flex-wrap gap-x-6 gap-y-3 text-sm ${esActivo ? 'motion-safe:animate-entrada' : ''}`}>
-                      <div>
-                        <dt>Tipo</dt>
-                        <dd className="mt-0.5 font-semibold">{proyecto.tipo}</dd>
-                      </div>
-                      <div>
-                        <dt>Área</dt>
-                        <dd className="mt-0.5 font-semibold tabular-nums">{proyecto.m2} m²</dd>
-                      </div>
-                      <div>
-                        <dt>Duración</dt>
-                        <dd className="mt-0.5 font-semibold tabular-nums">{proyecto.semanas} semanas</dd>
-                      </div>
-                    </dl>
-                  </figcaption>
-                </figure>
-              </li>
-            )
-          })}
-        </ul>
-      </div>
-
-      <div className={`${contenedor} mt-2`}>
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <nav aria-label="Elegir proyecto">
-            <ul className="flex flex-wrap">
-              {PROYECTOS.map((proyecto, i) => (
-                <li key={proyecto.nombre}>
-                  <button
-                    type="button"
-                    onClick={() => irA(i)}
-                    aria-label={`Ir al proyecto ${i + 1}: ${proyecto.nombre}`}
-                    aria-current={i === activo ? 'true' : undefined}
-                    className="flex size-11 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-safety"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className={`size-3 border-2 border-graphite transition-colors ${i === activo ? 'bg-graphite' : 'bg-transparent'}`}
-                    />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {!reducido && (
-            <button
-              type="button"
-              onClick={() => setPausaManual((p) => !p)}
-              className="min-h-12 border-2 border-graphite px-5 text-base font-semibold text-graphite transition-colors hover:bg-graphite hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safety"
-            >
-              {pausaManual ? 'Reanudar carrusel' : 'Pausar carrusel'}
-            </button>
-          )}
-        </div>
-
-        {!reducido && (
-          <div aria-hidden="true" className="mt-4 h-0.5 w-full overflow-hidden bg-graphite/20">
-            <div
-              key={`${activo}-${ciclo}`}
-              onAnimationEnd={() => irA((activo + 1) % PROYECTOS.length)}
-              style={{ animationPlayState: enPausa ? 'paused' : 'running' }}
-              className="h-full origin-left bg-safety motion-safe:animate-progreso"
-            />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setPausaManual((p) => !p)}
+                  className="min-h-11 shrink-0 rounded-full bg-white px-5 text-sm font-semibold transition-[background-color,color,transform] duration-200 hover:bg-graphite hover:text-white motion-safe:active:scale-[0.97] motion-reduce:transition-none"
+                >
+                  {pausaManual ? 'Reanudar carrusel' : 'Pausar carrusel'}
+                </button>
+              </div>
+            )}
           </div>
-        )}
+
+          <div
+            ref={pistaRef}
+            role="region"
+            aria-label="Galería de proyectos, desplazable horizontalmente"
+            tabIndex={0}
+            onKeyDown={alTecla}
+            onFocus={alEnfocar}
+            onBlur={alDesenfocar}
+            onPointerEnter={(e) => e.pointerType === 'mouse' && marcar('hover', true)}
+            onPointerLeave={() => marcar('hover', false)}
+            onPointerDown={() => {
+              cancelarObjetivo()
+              marcar('toque', true)
+            }}
+            onTouchStart={() => {
+              cancelarObjetivo()
+              marcar('toque', true)
+            }}
+            onWheel={cancelarObjetivo}
+            className={`relative snap-x snap-mandatory overflow-x-auto overscroll-x-contain pb-4 lg:col-span-8 ${ALINEACION} [scrollbar-color:theme(colors.cement)_transparent] [scrollbar-width:thin]`}
+          >
+            <ul className="flex gap-4 lg:gap-6">
+              {PROYECTOS.map((proyecto, i) => {
+                const esActivo = i === activo
+                return (
+                  <li key={proyecto.nombre} className="w-[min(82vw,26rem)] shrink-0 snap-start lg:w-full lg:snap-center">
+                    <figure
+                      tabIndex={0}
+                      className={`group rounded-[2rem] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safety ${esActivo ? 'scale-100 opacity-100' : 'scale-[0.97] opacity-60'}`}
+                    >
+                      <div className="relative flex aspect-[4/5] flex-col justify-end overflow-hidden rounded-[2rem] p-3 sm:p-4 lg:aspect-[4/3] lg:p-6">
+                        <ImagenProyecto src={proyecto.imagen} alt={proyecto.alt} />
+                        <figcaption className="relative max-w-sm rounded-3xl bg-white p-5 lg:p-6">
+                          <h3 className="break-words text-2xl font-light leading-tight tracking-[-0.02em]">{proyecto.nombre}</h3>
+                          <dl className={`mt-4 flex flex-wrap gap-x-6 gap-y-3 text-sm ${esActivo ? 'motion-safe:animate-entrada' : ''}`}>
+                            <div>
+                              <dt>Tipo</dt>
+                              <dd className="mt-0.5 font-semibold">{proyecto.tipo}</dd>
+                            </div>
+                            <div>
+                              <dt>Área</dt>
+                              <dd className="mt-0.5 font-semibold tabular-nums">{proyecto.m2} m²</dd>
+                            </div>
+                            <div>
+                              <dt>Duración</dt>
+                              <dd className="mt-0.5 font-semibold tabular-nums">{proyecto.semanas} semanas</dd>
+                            </div>
+                          </dl>
+                        </figcaption>
+                      </div>
+                      <p className="mt-3 px-2 text-sm">Ilustración de ejemplo</p>
+                    </figure>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
   )

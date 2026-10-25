@@ -1,59 +1,70 @@
-import { Building2, PaintRoller, Plug, ShieldCheck } from 'lucide-react'
 import { GARANTIAS } from '../data/garantias.js'
-import { contenedor, tituloSeccion } from '../lib/ui.js'
+import { ANCHOS_PROYECTO } from '../data/proyectos.js'
+import { contenedor, entradilla, tituloSeccion } from '../lib/ui.js'
+import { useRevelar } from '../lib/revelar.js'
+import ImagenResponsiva from './ImagenResponsiva.jsx'
 
-const ICONOS = {
-  'Obra civil': Building2,
-  Acabados: PaintRoller,
-  Instalaciones: Plug,
-}
+// Fotos apiladas junto a la lista (decorativas: la información está en el texto).
+const FOTOS = [
+  { src: '/projects/casa-el-penon.webp', alto: 'lg:h-44', encuadre: 'object-[center_30%]' },
+  { src: '/projects/edificio-cedritos.webp', alto: 'lg:h-72', encuadre: 'object-[center_40%]' },
+  { src: '/projects/apartamento-chico.webp', alto: 'lg:h-44', encuadre: 'object-center' },
+]
 
 export default function Garantias() {
+  const ref = useRevelar()
+
   return (
-    <section id="garantias" aria-labelledby="garantias-titulo" className="bg-concrete py-20 lg:py-28">
+    <section id="garantias" ref={ref} aria-labelledby="garantias-titulo" className="pb-24 lg:pb-40">
       <div className={contenedor}>
-        <div className="max-w-2xl">
-          <div className="flex items-center gap-4">
-            <ShieldCheck className="size-10 shrink-0 text-graphite" strokeWidth={2} aria-hidden="true" />
-            <h2 id="garantias-titulo" className={tituloSeccion}>
+        <div className="grid gap-10 rounded-[2rem] bg-safety/15 p-5 sm:p-10 lg:grid-cols-12 lg:gap-12 lg:p-14">
+          <div className="lg:col-span-7">
+            <h2 id="garantias-titulo" data-revelar className={tituloSeccion}>
               Garantía por escrito
             </h2>
-          </div>
-          <p className="mt-3 text-sm">Cobertura por concepto, desde la entrega</p>
-          <p className="mt-5 text-lg leading-relaxed">
-            Cada entrega incluye un acta con estos plazos. Si algo falla dentro de la cobertura, lo corregimos sin costo.
-          </p>
-          <p className="mt-6 border-t-2 border-graphite pt-3 text-sm font-semibold">
-            Garantía por escrito en el acta de entrega
-          </p>
-        </div>
+            <p data-revelar className={`${entradilla} mt-6 max-w-xl`}>
+              Cobertura por concepto, desde la entrega. Cada entrega incluye un acta con estos plazos. Si algo falla
+              dentro de la cobertura, lo corregimos sin costo.
+            </p>
 
-        <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
-          {GARANTIAS.map((garantia) => {
-            const Icono = ICONOS[garantia.concepto]
-            const [cantidad, unidad] = garantia.plazo.split(' ')
-            return (
-              <li
-                key={garantia.concepto}
-                className="flex flex-col border border-graphite bg-white p-6 sm:last:col-span-2 lg:last:col-span-1"
-              >
-                <div className="flex items-center gap-3">
-                  {Icono && <Icono className="size-8 shrink-0 text-graphite" strokeWidth={2} aria-hidden="true" />}
-                  <h3 className="ancho-semi text-xl font-bold leading-tight">{garantia.concepto}</h3>
-                </div>
-
-                <div className="mt-6">
-                  <p className="text-sm">Plazo</p>
-                  <p className="ancho-condensado mt-1 inline-block bg-safety px-3 py-1 text-4xl font-extrabold leading-none tabular-nums text-graphite">
-                    {cantidad} <span className="text-lg">{unidad}</span>
+            <ul data-revelar className="mt-10 flex flex-col gap-3">
+              {GARANTIAS.map((garantia) => (
+                <li
+                  key={garantia.concepto}
+                  className="grid gap-x-8 gap-y-3 rounded-3xl bg-white p-5 sm:grid-cols-[1fr_auto] sm:items-start sm:p-6"
+                >
+                  <div className="min-w-0">
+                    <h3 className="break-words text-2xl font-light leading-tight tracking-[-0.02em]">{garantia.concepto}</h3>
+                    <p className="mt-2 leading-relaxed">{garantia.cobertura}</p>
+                  </div>
+                  <p className="text-4xl font-light leading-none tracking-[-0.03em] tabular-nums sm:text-right sm:text-5xl">
+                    {garantia.plazo}
                   </p>
-                </div>
+                </li>
+              ))}
+            </ul>
 
-                <p className="mt-6 text-base leading-relaxed">{garantia.cobertura}</p>
-              </li>
-            )
-          })}
-        </ul>
+            <p className="mt-6 font-semibold">Garantía por escrito en el acta de entrega</p>
+          </div>
+
+          <div data-revelar className="grid grid-cols-3 gap-3 lg:col-span-5 lg:flex lg:flex-col lg:justify-center">
+            {FOTOS.map((foto) => (
+              <div key={foto.src} className={`aspect-square overflow-hidden rounded-3xl bg-cement lg:aspect-auto ${foto.alto}`}>
+                <ImagenResponsiva
+                  src={foto.src}
+                  anchos={ANCHOS_PROYECTO}
+                  sizes="(min-width: 1024px) 30vw, 33vw"
+                  alt=""
+                  width="960"
+                  height="1200"
+                  loading="lazy"
+                  decoding="async"
+                  className={`size-full object-cover ${foto.encuadre}`}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   )

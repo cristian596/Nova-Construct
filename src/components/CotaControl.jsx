@@ -11,10 +11,10 @@ const posicion = (valor) => (valor - M2.min) / (M2.max - M2.min)
 const estilosRango = [
   'relative block h-11 w-full cursor-pointer appearance-none bg-transparent',
   '[&::-webkit-slider-runnable-track]:h-11 [&::-webkit-slider-runnable-track]:bg-transparent',
-  '[&::-webkit-slider-thumb]:h-11 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:appearance-none',
+  '[&::-webkit-slider-thumb]:h-11 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full',
   '[&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-graphite [&::-webkit-slider-thumb]:bg-safety',
   '[&::-moz-range-track]:h-11 [&::-moz-range-track]:bg-transparent',
-  '[&::-moz-range-thumb]:box-border [&::-moz-range-thumb]:h-11 [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:rounded-none',
+  '[&::-moz-range-thumb]:box-border [&::-moz-range-thumb]:h-11 [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:rounded-full',
   '[&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-graphite [&::-moz-range-thumb]:bg-safety',
 ].join(' ')
 
@@ -37,7 +37,7 @@ export default function CotaControl({ id, valor, onChange, describedBy }) {
       {/* Valor encima del cursor. El texto se ancla en proporción para no salirse en los extremos. */}
       <span
         aria-hidden="true"
-        className="ancho-condensado pointer-events-none absolute top-0 whitespace-nowrap text-3xl font-extrabold leading-none tabular-nums"
+        className="pointer-events-none absolute top-0 whitespace-nowrap text-3xl font-light leading-none tracking-[-0.03em] tabular-nums"
         style={{ left: izquierda(fraccion), transform: `translateX(-${fraccion * 100}%)` }}
       >
         {valor} m²
@@ -89,7 +89,7 @@ export default function CotaControl({ id, valor, onChange, describedBy }) {
         {ETIQUETAS.map((etiqueta) => (
           <span
             key={etiqueta}
-            className="absolute -translate-x-1/2 text-xs tabular-nums text-concrete"
+            className="absolute -translate-x-1/2 text-sm tabular-nums text-concrete"
             style={{ left: `${posicion(etiqueta) * 100}%` }}
           >
             {etiqueta}

@@ -4,7 +4,8 @@ import { CONTACTO } from '../data/contacto.js'
 import { MARCA, esPendiente } from '../data/marca.js'
 import { contenedor, tituloSeccion } from '../lib/ui.js'
 
-export const enlaceTexto = 'inline-block py-3 -my-3 font-semibold underline underline-offset-4'
+// overflow-wrap: anywhere deja partir correos y URL largos sin desbordar la página.
+export const enlaceTexto = 'inline-block py-3 -my-3 font-semibold underline underline-offset-4 [overflow-wrap:anywhere]'
 export const listaTexto = 'mt-4 list-disc space-y-2 pl-6'
 
 const formatoFecha = new Intl.DateTimeFormat('es-CO', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
@@ -13,7 +14,7 @@ function Seccion({ prefijo, numero, titulo, children }) {
   const id = `${prefijo}-${numero}`
   return (
     <section aria-labelledby={id} className="mt-12">
-      <h2 id={id} className="ancho-semi text-2xl font-bold leading-tight sm:text-3xl">
+      <h2 id={id} className="text-2xl font-normal leading-tight tracking-[-0.02em] sm:text-3xl">
         {numero}. {titulo}
       </h2>
       <div className="mt-4 space-y-4">{children}</div>
@@ -24,7 +25,7 @@ function Seccion({ prefijo, numero, titulo, children }) {
 // Datos del responsable del tratamiento, leídos de marca.js. Se omiten los que están pendientes.
 export function DatosResponsable() {
   return (
-    <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-[auto_1fr]">
+    <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-[auto_minmax(0,1fr)]">
       <dt className="font-semibold">Nombre</dt>
       <dd>{MARCA.nombre}</dd>
       <dt className="font-semibold">Ciudad</dt>
@@ -68,12 +69,12 @@ export default function PaginaLegal({ titulo, tituloPestana, prefijo, introducci
   const fechaLegible = formatoFecha.format(new Date(`${fecha}T00:00:00Z`))
 
   return (
-    <main id="contenido" className="bg-white pt-16">
-      <div className={`${contenedor} py-14 lg:py-20`}>
-        <article className="max-w-3xl text-lg leading-relaxed">
+    <main id="contenido" className="pt-16">
+      <div className={`${contenedor} pb-24 pt-6 lg:pb-40`}>
+        <article className="mx-auto max-w-4xl rounded-[2rem] bg-white px-5 py-10 text-lg leading-relaxed sm:px-10 lg:px-16 lg:py-16">
           <Link
             to="/"
-            className="-ml-1 inline-flex min-h-11 items-center gap-2 px-1 font-semibold underline underline-offset-4"
+            className="-ml-3 inline-flex min-h-11 items-center gap-2 rounded-full px-3 font-semibold transition-colors duration-200 hover:bg-concrete"
           >
             <span aria-hidden="true">←</span>
             Volver al inicio

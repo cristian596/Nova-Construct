@@ -11,7 +11,11 @@ import {
 import { POLITICA_EXTERNA } from '../lib/aviso.js'
 import { botonSecundario } from '../lib/ui.js'
 
-const CLASE_ENLACE = 'underline underline-offset-4 hover:text-concrete'
+const CLASE_ENLACE = 'font-semibold underline underline-offset-4'
+
+// Panel flotante sobre la página: es el único elemento con sombra.
+const CLASE_BANNER =
+  'fixed inset-x-3 bottom-3 z-[55] rounded-3xl bg-white p-5 text-graphite shadow-[0_12px_40px_rgb(0_0_0/0.18)] sm:inset-x-6 sm:bottom-6 sm:p-6' // taste-skill-ignore
 
 // Propiedad que Google Analytics lee para dejar de medir en la página actual.
 const claveDesactivar = () => `ga-disable-${String(MARCA.googleAnalyticsId).trim()}`
@@ -89,8 +93,7 @@ export default function BannerCookies() {
   return (
     <section
       aria-label="Cookies de análisis"
-      data-fondo="oscuro"
-      className="fixed inset-x-0 bottom-0 z-[55] bg-graphite p-4 text-white"
+      className={CLASE_BANNER}
     >
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <p className="max-w-3xl">
@@ -107,7 +110,7 @@ export default function BannerCookies() {
           )}
           .
           {decision && (
-            <span className="mt-2 block text-sm text-concrete">
+            <span className="mt-2 block text-sm">
               Tu decisión actual: {decision === 'aceptado' ? 'cookies aceptadas' : 'cookies rechazadas'}.
             </span>
           )}
@@ -122,7 +125,7 @@ export default function BannerCookies() {
             </button>
           </div>
           {pedirRecarga && (
-            <p role="status" className="text-sm text-concrete">
+            <p role="status" className="text-sm">
               Para dejar de medir por completo, recarga la página.
             </p>
           )}

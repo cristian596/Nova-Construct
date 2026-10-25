@@ -5,7 +5,10 @@ import { CIUDADES, TIPOS } from '../data/cotizador.js'
 import { MARCA, esPendiente } from '../data/marca.js'
 import { AVISO_EXTERNO, POLITICA_EXTERNA } from '../lib/aviso.js'
 import { generarFolio } from '../lib/folio.js'
-import { botonPrimario, botonSecundario, contenedor, tituloSeccion } from '../lib/ui.js'
+import { ANCHOS_PROYECTO } from '../data/proyectos.js'
+import { botonPrimario, botonSecundario, contenedor, entradilla, tituloSeccion } from '../lib/ui.js'
+import { useRevelar } from '../lib/revelar.js'
+import ImagenResponsiva from './ImagenResponsiva.jsx'
 
 const CAMPOS = ['nombre', 'telefono', 'tipo', 'autorizacion']
 const VACIO = { nombre: '', telefono: '', tipo: '', ciudad: '', presupuesto: '', mensaje: '', autorizacion: false }
@@ -26,6 +29,9 @@ function validar(valores) {
 }
 
 const LIMITE_MENSAJE = 1000
+
+// Foto de la banda de llamada a la acción (decorativa).
+const IMAGEN_CONTACTO = '/projects/casa-llanogrande.webp'
 
 // Mensaje de WhatsApp con formato fijo; los campos opcionales vacíos llevan su valor por defecto.
 function textoWhatsApp(valores, folio) {
@@ -48,18 +54,19 @@ function textoWhatsApp(valores, folio) {
 }
 
 // Borde de 1 px; en foco o error pasa a 2 px y el relleno baja 1 px para que el campo no cambie de tamaño.
-// El anillo de foco (2 px en safety, separado 2 px) viene de :focus-visible en index.css.
+// El anillo de foco (2 px, separado 2 px) viene de :focus-visible en index.css.
 const estiloCampo = [
-  'mt-2 block min-h-12 w-full rounded-none border border-graphite bg-white px-3 py-3.5 text-base text-graphite shadow-none',
-  'focus:border-2 focus:px-[11px] focus:py-[13px] aria-[invalid=true]:border-2 aria-[invalid=true]:px-[11px] aria-[invalid=true]:py-[13px]',
+  'mt-2 block min-h-12 w-full rounded-xl border border-cement bg-white px-4 py-3.5 text-base text-graphite shadow-none',
+  'focus:border-2 focus:border-graphite focus:px-[15px] focus:py-[13px]',
+  'aria-[invalid=true]:border-2 aria-[invalid=true]:border-safety aria-[invalid=true]:px-[15px] aria-[invalid=true]:py-[13px]',
 ].join(' ')
 
 const estiloSelect = `${estiloCampo} cursor-pointer appearance-none pr-12 focus:pr-[47px] aria-[invalid=true]:pr-[47px]`
 
 function MensajeError({ id, children }) {
   return (
-    <p id={`${id}-error`} className="mt-2 flex items-start gap-2 text-sm font-semibold text-safety">
-      <svg aria-hidden="true" viewBox="0 0 20 20" className="mt-0.5 size-4 shrink-0" fill="currentColor">
+    <p id={`${id}-error`} className="mt-2 flex items-start gap-2 text-sm font-semibold">
+      <svg aria-hidden="true" viewBox="0 0 20 20" className="mt-0.5 size-4 shrink-0 text-safety" fill="currentColor">
         <path d="M10 1l9.5 17H.5L10 1zm-1 6v5h2V7H9zm0 6.5V15h2v-1.5H9z" />
       </svg>
       {children}
@@ -81,7 +88,7 @@ function Campo({ id, etiqueta, error, className, children }) {
 
 function IconoWhatsApp() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="size-6 shrink-0" fill="#25D366">
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="size-6 shrink-0" fill="currentColor">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
     </svg>
   )
@@ -96,6 +103,7 @@ export default function Contacto() {
   const formRef = useRef(null)
   const mensajeRef = useRef(null)
   const avisoRef = useRef(null)
+  const cabeceraRef = useRevelar()
 
   // El textarea parte en 3 filas y crece con el texto.
   useLayoutEffect(() => {
@@ -172,210 +180,226 @@ export default function Contacto() {
   const claveAviso = 'inline-flex min-h-11 items-center text-sm underline underline-offset-4'
 
   return (
-    <section id="contacto" aria-labelledby="contacto-titulo" className="bg-white py-20 lg:py-28">
+    <section id="contacto" aria-labelledby="contacto-titulo" className="pb-24 lg:pb-40">
       <div className={contenedor}>
-        <div className="max-w-2xl">
-          <h2 id="contacto-titulo" className={tituloSeccion}>
-            Hablemos de tu obra
-          </h2>
-          <p className="mt-5 text-lg leading-relaxed">
-            Déjanos tus datos y te llamamos para agendar la visita técnica.
-          </p>
-        </div>
+        <div ref={cabeceraRef} className="grid overflow-hidden rounded-[2rem] bg-white lg:grid-cols-12">
+          <div className="p-5 sm:p-10 lg:col-span-7 lg:p-14">
+            <h2 id="contacto-titulo" data-revelar className={tituloSeccion}>
+              Hablemos de tu obra
+            </h2>
+            <p data-revelar className={`${entradilla} mt-6 max-w-lg`}>
+              Déjanos tus datos y te llamamos para agendar la visita técnica.
+            </p>
 
-        <div className={`mt-12 border border-graphite bg-concrete p-5 lg:p-8 ${hayLateral ? 'lg:grid lg:grid-cols-12' : ''}`}>
-          <form ref={formRef} noValidate onSubmit={enviar} className={hayLateral ? 'pb-12 lg:col-span-7 lg:pb-0 lg:pr-12' : 'mx-auto w-full max-w-3xl'}>
-            <div className="grid gap-6 sm:grid-cols-2">
-              <Campo id="contacto-nombre" etiqueta="Nombre" error={errores.nombre}>
-                <input type="text" autoComplete="name" {...atributos('nombre', true)} />
-              </Campo>
-              <Campo id="contacto-telefono" etiqueta="Teléfono" error={errores.telefono}>
-                <input type="tel" autoComplete="tel" inputMode="tel" {...atributos('telefono', true)} />
-              </Campo>
-              <Campo id="contacto-tipo" etiqueta="Tipo de proyecto" error={errores.tipo} className="sm:col-span-2">
-                <div className="relative">
-                  <select {...atributos('tipo', true)} className={estiloSelect}>
-                    <option value="">Selecciona una opción</option>
-                    {TIPOS.map((tipo) => (
-                      <option key={tipo.id} value={tipo.id}>
-                        {tipo.nombre}
-                      </option>
-                    ))}
-                  </select>
-                  <Chevron />
-                </div>
-              </Campo>
-              <Campo id="contacto-ciudad" etiqueta="Ciudad" className="sm:col-span-2">
-                <div className="relative">
-                  <select autoComplete="address-level2" {...atributos('ciudad')} className={estiloSelect}>
-                    <option value="">Selecciona una opción</option>
-                    {CIUDADES.map((ciudad) => (
-                      <option key={ciudad.id} value={ciudad.id}>
-                        {ciudad.nombre}
-                      </option>
-                    ))}
-                  </select>
-                  <Chevron />
-                </div>
-              </Campo>
-              <div className="sm:col-span-2">
-                <Campo id="contacto-presupuesto" etiqueta="Presupuesto estimado">
+            <form ref={formRef} noValidate onSubmit={enviar} className="mt-10 lg:mt-12">
+              <div className="grid gap-6 sm:grid-cols-2">
+                <Campo id="contacto-nombre" etiqueta="Nombre" error={errores.nombre}>
+                  <input type="text" autoComplete="name" {...atributos('nombre', true)} />
+                </Campo>
+                <Campo id="contacto-telefono" etiqueta="Teléfono" error={errores.telefono}>
+                  <input type="tel" autoComplete="tel" inputMode="tel" {...atributos('telefono', true)} />
+                </Campo>
+                <Campo id="contacto-tipo" etiqueta="Tipo de proyecto" error={errores.tipo} className="sm:col-span-2">
                   <div className="relative">
-                    <select autoComplete="off" {...atributos('presupuesto')} className={estiloSelect}>
+                    <select {...atributos('tipo', true)} className={estiloSelect}>
                       <option value="">Selecciona una opción</option>
-                      {PRESUPUESTOS.map((rango) => (
-                        <option key={rango} value={rango}>
-                          {rango}
+                      {TIPOS.map((tipo) => (
+                        <option key={tipo.id} value={tipo.id}>
+                          {tipo.nombre}
                         </option>
                       ))}
                     </select>
                     <Chevron />
                   </div>
                 </Campo>
-              </div>
-              <div className="sm:col-span-2">
-                <Campo id="contacto-mensaje" etiqueta="Cuéntanos brevemente (opcional)">
-                  <textarea
-                    ref={mensajeRef}
-                    rows="3"
-                    {...atributos('mensaje')}
-                    className={`${estiloCampo} resize-none overflow-hidden`}
-                  />
+                <Campo id="contacto-ciudad" etiqueta="Ciudad" className="sm:col-span-2">
+                  <div className="relative">
+                    <select autoComplete="address-level2" {...atributos('ciudad')} className={estiloSelect}>
+                      <option value="">Selecciona una opción</option>
+                      {CIUDADES.map((ciudad) => (
+                        <option key={ciudad.id} value={ciudad.id}>
+                          {ciudad.nombre}
+                        </option>
+                      ))}
+                    </select>
+                    <Chevron />
+                  </div>
                 </Campo>
+                <div className="sm:col-span-2">
+                  <Campo id="contacto-presupuesto" etiqueta="Presupuesto estimado">
+                    <div className="relative">
+                      <select autoComplete="off" {...atributos('presupuesto')} className={estiloSelect}>
+                        <option value="">Selecciona una opción</option>
+                        {PRESUPUESTOS.map((rango) => (
+                          <option key={rango} value={rango}>
+                            {rango}
+                          </option>
+                        ))}
+                      </select>
+                      <Chevron />
+                    </div>
+                  </Campo>
+                </div>
+                <div className="sm:col-span-2">
+                  <Campo id="contacto-mensaje" etiqueta="Cuéntanos brevemente (opcional)">
+                    <textarea
+                      ref={mensajeRef}
+                      rows="3"
+                      {...atributos('mensaje')}
+                      className={`${estiloCampo} resize-none overflow-hidden`}
+                    />
+                  </Campo>
+                </div>
               </div>
-            </div>
 
-            <div className="mt-6">
-              <label htmlFor="contacto-autorizacion" className="flex cursor-pointer items-start gap-3 text-sm">
-                <input
-                  id="contacto-autorizacion"
-                  name="autorizacion"
-                  type="checkbox"
-                  checked={valores.autorizacion}
-                  onChange={cambiar}
-                  required
-                  aria-invalid={Boolean(errores.autorizacion)}
-                  aria-describedby={errores.autorizacion ? 'contacto-autorizacion-error' : undefined}
-                  className="mt-0.5 size-6 shrink-0 cursor-pointer rounded-none border border-graphite accent-graphite aria-[invalid=true]:outline aria-[invalid=true]:outline-2 aria-[invalid=true]:outline-graphite"
-                />
-                <span>
-                  Autorizo a {MARCA.nombre} a tratar mis datos personales para responder mi solicitud, conforme a la
-                  Política de tratamiento de datos.
-                </span>
-              </label>
-              {errores.autorizacion && <MensajeError id="contacto-autorizacion">{errores.autorizacion}</MensajeError>}
-              {POLITICA_EXTERNA ? (
-                <a href={MARCA.urlPoliticaDatos} className={`${claveAviso} mt-1`}>
-                  Ver política de tratamiento
-                </a>
-              ) : (
-                <Link to={MARCA.urlPoliticaDatos} className={`${claveAviso} mt-1`}>
-                  Ver política de tratamiento
-                </Link>
-              )}
-            </div>
-
-            <div className="mt-6">
-              {hayAviso && (
-                <div
-                  ref={avisoRef}
-                  role="status"
-                  aria-live="polite"
-                  tabIndex={-1}
-                  className={`mb-6 flex items-start gap-3 border-2 bg-white p-5 text-sm font-medium ${
-                    estado === 'error' ? 'border-safety' : 'border-graphite'
-                  }`}
-                >
-                  <svg aria-hidden="true" viewBox="0 0 20 20" className="mt-0.5 size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M4 10.5l4 4 8-9" />
-                  </svg>
-                  <p>
-                    {estado === 'whatsapp' && (
-                      <>
-                        Revisa WhatsApp y pulsa enviar para completar tu solicitud. Si no se abrió,{' '}
-                        <a
-                          href={enlaceWhatsApp(textoWhatsApp(valores, folio))}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline underline-offset-4"
-                        >
-                          abrir WhatsApp de nuevo
-                          <span className="sr-only"> (se abre en una pestaña nueva)</span>
-                        </a>
-                        .
-                      </>
-                    )}
-                    {estado === 'enviado' && mensajeConfirmacion}
-                    {estado === 'error' && mensajeError}
-                  </p>
-                </div>
-              )}
-              <button
-                type="submit"
-                disabled={estado === 'enviando'}
-                className={`${botonPrimario} w-full lg:w-auto lg:px-4`}
-              >
-                {estado === 'enviando' ? 'Enviando…' : 'Solicitar cotización'}
-              </button>
-              <p className="mt-3 text-sm">{TIEMPO_RESPUESTA}</p>
-              <p className="mt-6 text-sm">Usamos tus datos solo para responder tu solicitud.</p>
-              {AVISO_EXTERNO ? (
-                <a href={MARCA.urlAvisoPrivacidad} className={`${claveAviso} -mb-3`}>
-                  Ver aviso de privacidad
-                </a>
-              ) : (
-                <Link to={MARCA.urlAvisoPrivacidad} className={`${claveAviso} -mb-3`}>
-                  Ver aviso de privacidad
-                </Link>
-              )}
-            </div>
-          </form>
-
-          {hayLateral && (
-            <div className="border-t border-cement pt-12 lg:col-span-5 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
-              {hayWhatsapp && (
-                <div>
-                  <p className="font-semibold">¿Prefieres respuesta inmediata?</p>
-                  <a
-                    href={enlaceWhatsApp(textoWhatsApp(valores.autorizacion ? valores : VACIO, folio))}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`${botonSecundario} mt-4 w-full`}
-                  >
-                    <IconoWhatsApp />
-                    Chatear por WhatsApp
-                    <span className="sr-only"> (se abre en una pestaña nueva)</span>
+              <div className="mt-6">
+                <label htmlFor="contacto-autorizacion" className="flex cursor-pointer items-start gap-3 text-sm">
+                  <input
+                    id="contacto-autorizacion"
+                    name="autorizacion"
+                    type="checkbox"
+                    checked={valores.autorizacion}
+                    onChange={cambiar}
+                    required
+                    aria-invalid={Boolean(errores.autorizacion)}
+                    aria-describedby={errores.autorizacion ? 'contacto-autorizacion-error' : undefined}
+                    className="mt-0.5 size-6 shrink-0 cursor-pointer rounded-md border border-graphite accent-graphite aria-[invalid=true]:outline aria-[invalid=true]:outline-2 aria-[invalid=true]:outline-safety"
+                  />
+                  <span>
+                    Autorizo a {MARCA.nombre} a tratar mis datos personales para responder mi solicitud, conforme a la
+                    Política de tratamiento de datos.
+                  </span>
+                </label>
+                {errores.autorizacion && <MensajeError id="contacto-autorizacion">{errores.autorizacion}</MensajeError>}
+                {POLITICA_EXTERNA ? (
+                  <a href={MARCA.urlPoliticaDatos} className={`${claveAviso} mt-1`}>
+                    Ver política de tratamiento
                   </a>
-                </div>
-              )}
-              {hayDatos && (
-                <dl className={`grid gap-6 ${hayWhatsapp ? 'mt-8' : ''}`}>
-                  {!esPendiente(MARCA.direccion) && (
-                    <div>
-                      <dt className="text-sm">Dirección</dt>
-                      <dd className="mt-1 font-semibold">{MARCA.direccion}, {MARCA.ciudad}</dd>
-                    </div>
-                  )}
-                  {!esPendiente(MARCA.telefono) && (
-                    <div>
-                      <dt className="text-sm">Teléfono</dt>
-                      <dd className="mt-1 font-semibold">
-                        <a href={`tel:${CONTACTO.telefonoHref}`} className="-my-3 inline-block py-3 underline underline-offset-4">
-                          {MARCA.telefono}
-                        </a>
-                      </dd>
-                    </div>
-                  )}
-                  {!esPendiente(MARCA.horario) && (
-                    <div>
-                      <dt className="text-sm">Horario</dt>
-                      <dd className="mt-1 font-semibold">{MARCA.horario}</dd>
-                    </div>
-                  )}
-                </dl>
-              )}
+                ) : (
+                  <Link to={MARCA.urlPoliticaDatos} className={`${claveAviso} mt-1`}>
+                    Ver política de tratamiento
+                  </Link>
+                )}
+              </div>
+
+              <div className="mt-6">
+                {hayAviso && (
+                  <div
+                    ref={avisoRef}
+                    role="status"
+                    aria-live="polite"
+                    tabIndex={-1}
+                    className={`mb-6 flex items-start gap-3 rounded-2xl p-5 text-sm font-medium ${
+                      estado === 'error' ? 'bg-safety/15' : 'bg-concrete'
+                    }`}
+                  >
+                    <svg aria-hidden="true" viewBox="0 0 20 20" className="mt-0.5 size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M4 10.5l4 4 8-9" />
+                    </svg>
+                    <p>
+                      {estado === 'whatsapp' && (
+                        <>
+                          Revisa WhatsApp y pulsa enviar para completar tu solicitud. Si no se abrió,{' '}
+                          <a
+                            href={enlaceWhatsApp(textoWhatsApp(valores, folio))}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline underline-offset-4"
+                          >
+                            abrir WhatsApp de nuevo
+                            <span className="sr-only"> (se abre en una pestaña nueva)</span>
+                          </a>
+                          .
+                        </>
+                      )}
+                      {estado === 'enviado' && mensajeConfirmacion}
+                      {estado === 'error' && mensajeError}
+                    </p>
+                  </div>
+                )}
+                <button
+                  type="submit"
+                  disabled={estado === 'enviando'}
+                  className={`${botonPrimario} w-full sm:w-auto sm:px-8`}
+                >
+                  {estado === 'enviando' ? 'Enviando…' : 'Solicitar cotización'}
+                </button>
+                <p className="mt-3 text-sm">{TIEMPO_RESPUESTA}</p>
+                <p className="mt-6 text-sm">Usamos tus datos solo para responder tu solicitud.</p>
+                {AVISO_EXTERNO ? (
+                  <a href={MARCA.urlAvisoPrivacidad} className={`${claveAviso} -mb-3`}>
+                    Ver aviso de privacidad
+                  </a>
+                ) : (
+                  <Link to={MARCA.urlAvisoPrivacidad} className={`${claveAviso} -mb-3`}>
+                    Ver aviso de privacidad
+                  </Link>
+                )}
+              </div>
+            </form>
+          </div>
+
+          {/* Foto de la obra y, si hay datos, la columna de contacto directo. */}
+          <div className="flex flex-col lg:col-span-5">
+            <div data-revelar className="h-56 bg-cement sm:h-72 lg:h-auto lg:min-h-[22rem] lg:flex-1">
+              <ImagenResponsiva
+                src={IMAGEN_CONTACTO}
+                anchos={ANCHOS_PROYECTO}
+                sizes="(min-width: 1024px) 40vw, 100vw"
+                alt=""
+                width="960"
+                height="1200"
+                loading="lazy"
+                decoding="async"
+                className="size-full object-cover object-[center_45%]"
+              />
             </div>
-          )}
+            {hayLateral && (
+              <div className="m-3 rounded-3xl bg-concrete p-6 sm:p-8">
+                {hayWhatsapp && (
+                  <div>
+                    <p className="text-2xl font-light tracking-[-0.02em]">¿Prefieres respuesta inmediata?</p>
+                    <a
+                      href={enlaceWhatsApp(textoWhatsApp(valores.autorizacion ? valores : VACIO, folio))}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`${botonSecundario} mt-4 w-full`}
+                    >
+                      <IconoWhatsApp />
+                      Chatear por WhatsApp
+                      <span className="sr-only"> (se abre en una pestaña nueva)</span>
+                    </a>
+                  </div>
+                )}
+                {hayDatos && (
+                  <dl className={`grid gap-6 ${hayWhatsapp ? 'mt-8' : ''}`}>
+                    {!esPendiente(MARCA.direccion) && (
+                      <div>
+                        <dt className="text-sm">Dirección</dt>
+                        <dd className="mt-1 break-words font-semibold">{MARCA.direccion}, {MARCA.ciudad}</dd>
+                      </div>
+                    )}
+                    {!esPendiente(MARCA.telefono) && (
+                      <div>
+                        <dt className="text-sm">Teléfono</dt>
+                        <dd className="mt-1 font-semibold">
+                          <a href={`tel:${CONTACTO.telefonoHref}`} className="-my-3 inline-block break-words py-3 underline underline-offset-4">
+                            {MARCA.telefono}
+                          </a>
+                        </dd>
+                      </div>
+                    )}
+                    {!esPendiente(MARCA.horario) && (
+                      <div>
+                        <dt className="text-sm">Horario</dt>
+                        <dd className="mt-1 break-words font-semibold">{MARCA.horario}</dd>
+                      </div>
+                    )}
+                  </dl>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>

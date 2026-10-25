@@ -1,6 +1,6 @@
 # Plantilla de landing para constructora
 
-Landing de una sola página para empresas de construcción y remodelación. Incluye: **hero** con foto, **servicios**, **cotizador preliminar** (calcula un rango en pesos), **proyectos** (carrusel de obras), **proceso** de trabajo (cinco etapas con íconos), **garantías** (tarjetas) y **contacto** con formulario y WhatsApp.
+Landing de una sola página para empresas de construcción y remodelación. Incluye: **hero** con foto, **servicios**, **cotizador preliminar** (calcula un rango en pesos), **proyectos** (carrusel de obras), **proceso** de trabajo (cinco etapas con una línea de avance), **garantías** (plazo por concepto) y **contacto** con formulario y WhatsApp.
 
 Está hecha con React, Vite y Tailwind CSS. No necesita base de datos ni servidor: al compilarla se obtiene una carpeta de archivos estáticos (`dist`) que se publica en Cloudflare Pages (ver sección 7).
 
@@ -75,7 +75,7 @@ Todo lo que se repite en la web (nombre, teléfono, dirección…) está en **`s
 | `telefono` | Teléfono tal como se muestra. | Sección de contacto. |
 | `direccion` | Dirección **sin la ciudad** (se agrega sola desde `ciudad`). | Sección de contacto. |
 | `horario` | Horario de atención. | Sección de contacto. |
-| `anio_fundacion` | Año de fundación de tu empresa, solo el número. Lo pones tú: no hay un valor por defecto. | Hero: "Desde AAAA" en la línea de cota. Mientras esté pendiente, esa línea se oculta completa. |
+| `anio_fundacion` | Año de fundación de tu empresa, solo el número. Lo pones tú: no hay un valor por defecto. | Hero: "Desde AAAA" bajo el eslogan. Mientras esté pendiente, esa línea se oculta. |
 | `datosConfianza` | Tres cifras de la empresa (por ejemplo `25` años de experiencia). Las que digan `TODO` se ocultan; con menos de dos cifras, se oculta la fila. | Hero, bajo el eslogan. |
 | `redes` | Enlaces completos a tus perfiles: `instagram`, `facebook`, `linkedin`, `youtube`, `tiktok`. | Footer. Solo aparecen los que tengan enlace; los vacíos se ocultan. |
 | `correo` | Correo de contacto. | Aviso de privacidad y política de tratamiento (responsable y canal para ejercer derechos). |
@@ -117,15 +117,15 @@ Además del nombre en `marca.js`, cambia el nombre en estos lugares, que no leen
 
 ### 5.1 Hero (portada)
 
-- **Titular**: `src/components/Hero.jsx`, lista `TITULAR`. Cada elemento es una línea del titular, y cada línea se anima por separado.
-- **Línea de cota naranja** ("Desde AAAA", donde AAAA es tu año de fundación): sale de `anio_fundacion` en `marca.js`. Si ese dato está pendiente, la línea completa (trazo, texto y extremos) no se muestra. Si prefieres otro dato (por ejemplo "+300 obras"), cambia `DATO_COTA` en `Hero.jsx`.
+- **Titular**: `src/components/Hero.jsx`, lista `TITULAR`. Cada elemento es una línea del titular (son dos, y cada una se anima por separado). Si cambias el texto, mantén dos líneas de largo parecido: el tamaño de letra está calculado para que cada línea quepa en una sola fila.
+- **"Desde AAAA"** (AAAA es tu año de fundación): sale de `anio_fundacion` en `marca.js` y aparece bajo el eslogan. Si ese dato está pendiente, no se muestra. Si prefieres otro dato (por ejemplo "+300 obras"), cambia `DATO_FUNDACION` en `Hero.jsx`.
 - **Texto bajo el titular**: es el `eslogan` de `marca.js`.
-- **Cifras de la empresa**: salen de `datosConfianza` en `marca.js` y se muestran dentro del hero, bajo el eslogan. Las pendientes se omiten y, con menos de dos, se oculta la fila.
+- **Cifras de la empresa**: salen de `datosConfianza` en `marca.js` y se muestran en el hero, junto a los botones. Las pendientes se omiten y, con menos de dos, se oculta la fila.
 - **Botones**: sus textos ("Cotizar mi proyecto", "Ver proyectos") están directamente en `Hero.jsx`.
-- **Palabra decorativa** del fondo: `palabraFondo` en `marca.js`.
+- **Palabra decorativa**: `palabraFondo` en `marca.js`. Se muestra en grande, cortada por el borde inferior, en la banda de foto que va entre Servicios y el Cotizador; su tamaño se ajusta solo al largo de la palabra.
 - **Foto**: archivo `public/placeholders/hero.webp`. La ruta se define en `Hero.jsx`, constante `IMAGEN_HERO`. La foto ocupa todo el ancho de la pantalla y se recorta para llenar el espacio, así que:
   - Usa una foto **horizontal (apaisada), de al menos 2400 px de ancho**. La actual mide 1456 × 816 px y se ve blanda en pantallas grandes.
-  - Pon el sujeto principal en el **lado derecho**: el texto va a la izquierda sobre un degradado oscuro.
+  - La foto va en un marco redondeado debajo del titular, sin texto encima. En escritorio, la tarjeta de proyectos ocupa su esquina superior derecha y las tarjetas de Servicios se apoyan sobre su borde inferior: evita que el sujeto principal quede en esas zonas.
   - Si cambias el tamaño, actualiza los atributos `width` y `height` de la etiqueta `<img>` en `Hero.jsx`.
   - Formato recomendado: WebP, idealmente por debajo de 300 KB.
 
@@ -184,7 +184,7 @@ Archivo `src/data/proyectos.js`. Cada proyecto tiene `nombre`, `tipo`, `m2`, `se
 4. En `proyectos.js`, escribe `imagen: '/projects/casa-bosque.webp'`. La ruta empieza con `/` y **no** incluye `public`.
 5. Escribe `alt`: una frase que **describa lo que se ve en la foto** (para personas con lector de pantalla y para Google). No pongas el nombre de la empresa.
 
-Los proyectos se muestran en un **carrusel** que avanza solo, se desplaza con el dedo o el mouse, tiene puntos de navegación y un botón para pausarlo. Para agregar un proyecto nuevo, copia un bloque completo `{ … }` y cambia sus valores. La cantidad de proyectos ("6 proyectos") se actualiza sola.
+Los proyectos se muestran en un **carrusel** que avanza solo, se desplaza con el dedo o el mouse, tiene una lista con el nombre de cada obra para saltar a ella y un botón para pausarlo. Para agregar un proyecto nuevo, copia un bloque completo `{ … }` y cambia sus valores. Si dejas la lista vacía, la sección y sus enlaces (menú, footer y botón "Ver proyectos") desaparecen.
 
 **Leyenda "Ilustración de ejemplo":** aparece bajo cada imagen. Está en `src/components/Proyectos.jsx` (busca `Ilustración de ejemplo`). Cuando uses fotos reales de tus obras, **elimina esa línea** (`npm run revisar` te avisa mientras siga ahí) o cámbiala por otra leyenda (por ejemplo, "Foto: obra terminada, 2024").
 
@@ -199,9 +199,9 @@ Si una imagen no carga, el marco gris se mantiene con la leyenda debajo y la pá
 - `anios`: el mismo plazo **como número** (`10`). Se conserva junto al plazo en texto.
 - `cobertura`: qué cubre.
 
-Las garantías se muestran en **tarjetas** (una por concepto, con ícono, plazo y cobertura). El ícono se asigna por el nombre exacto del `concepto` (`Obra civil`, `Acabados`, `Instalaciones`) en `src/components/Garantias.jsx`; si agregas un concepto nuevo, agrega su ícono ahí o la tarjeta saldrá sin ícono. Mantén `plazo` y `anios` coherentes. **Confirma los plazos y coberturas con el responsable legal antes de publicar**: los actuales son ejemplos.
+Las garantías se muestran como una lista (una fila por concepto, con su cobertura y el plazo en grande). Las tres fotos que la acompañan se definen en `FOTOS`, en `src/components/Garantias.jsx`. Mantén `plazo` y `anios` coherentes. **Confirma los plazos y coberturas con el responsable legal antes de publicar**: los actuales son ejemplos.
 
-**Proceso**, `src/components/Proceso.jsx`, lista `PASOS` (`titulo`, `texto` e `Icono` de cada etapa; los íconos son de [lucide](https://lucide.dev) y se importan al inicio del archivo). El diseño está pensado para **5 etapas**: si cambias la cantidad, ajusta también `lg:grid-cols-5` en el mismo archivo y el texto "Cinco etapas, siempre en el mismo orden".
+**Proceso**, `src/components/Proceso.jsx`, lista `PASOS` (`titulo` y `texto` de cada etapa; `resaltar` marca en negrita las palabras indicadas). El diseño está pensado para **5 etapas**: si cambias la cantidad, ajusta también `lg:grid-cols-5` en el mismo archivo y el texto "Cinco etapas, siempre en el mismo orden".
 
 ### 5.6 Contacto
 
@@ -247,17 +247,16 @@ Los colores se definen en `colores`, dentro de `src/data/marca.js`; `tailwind.co
 
 | Token | Valor actual | Dónde se usa |
 | --- | --- | --- |
-| `white` | `#FFFFFF` | Fondo del header y de las secciones Servicios, Proceso y Contacto; texto sobre fondos oscuros; botón secundario. |
-| `concrete` | `#ECECEA` | Fondo de las secciones Proyectos y Garantías; texto secundario sobre fondos oscuros (cotizador, footer). |
-| `graphite` | `#2A2C2E` | Texto principal; fondo del hero, cotizador y footer; bordes y líneas de las tarjetas de garantías; texto de botones. |
-| `cement` | `#8B8F94` | Bordes de campos, líneas decorativas y fondo del marco de las imágenes. **No lo uses para texto sobre fondo claro** (no cumple el contraste mínimo de accesibilidad). |
-| `safety` | `#FF6A13` | Color de acento: botón principal, anillo de foco del teclado, avisos de error, línea de cota del hero. |
+| `white` | `#FFFFFF` | Tarjetas y paneles (Servicios, Proceso, Contacto, resultado del cotizador); texto sobre fondos oscuros. |
+| `concrete` | `#ECECEA` | Fondo de toda la página y del header; texto secundario sobre fondos oscuros (cotizador, footer). |
+| `graphite` | `#2A2C2E` | Texto principal; fondo del cotizador y del footer; velo sobre las fotos con texto; botón secundario. |
+| `cement` | `#8B8F94` | Bordes de campos, marcadores pendientes del proceso y fondo del marco de las imágenes. **No lo uses para texto sobre fondo claro** (no cumple el contraste mínimo de accesibilidad). |
+| `safety` | `#FF6A13` | Color de acento: botón principal, línea de avance del proceso, iconos de error. Al 15 % de opacidad, fondo del bloque de Garantías. |
 
-Hay tres lugares donde el color está escrito a mano y **debes cambiar tú** si modificas la paleta:
+Hay dos lugares donde el color está escrito a mano y **debes cambiar tú** si modificas la paleta:
 
 - `index.html`: `<meta name="theme-color" content="#2A2C2E" />` (el color de la barra del navegador en el móvil).
 - `public/favicon.svg`: los colores del ícono.
-- `src/components/Proyectos.jsx`: el color de la barra de desplazamiento de la galería (`#8B8F94`).
 
 Después de cambiar colores, revisa que el texto siga siendo legible: el texto `graphite` sobre `safety` y el `concrete` sobre `graphite` son las combinaciones clave.
 
@@ -275,7 +274,7 @@ y se asigna en `tailwind.config.js` (`fontFamily.sans`).
 
 1. Elige una fuente en [fonts.google.com](https://fonts.google.com) y copia su enlace `<link>`; reemplaza el de Archivo en `index.html`.
 2. En `tailwind.config.js`, cambia `Archivo` por el nombre de tu fuente en `fontFamily.sans`.
-3. Los titulares usan las clases `ancho-condensado`, `ancho-semi` y `ancho-normal` (definidas al final de `tailwind.config.js`), que modifican el **ancho** de la letra. Eso solo funciona con fuentes que tengan eje de ancho (`wdth`), como Archivo. Con otra fuente esas clases no tendrán efecto y los titulares se verán más anchos de lo diseñado; revisa el resultado.
+3. Los titulares usan el peso ligero (`font-light`) con el interletrado cerrado, y sus tamaños están calculados para que no pasen de dos líneas con Archivo. Con otra fuente, revisa en el móvil y en escritorio que ningún titular pase a tres líneas.
 
 ### 5.10 Google Analytics y banner de cookies
 

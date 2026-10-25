@@ -2,13 +2,7 @@ import { useEffect, useState } from 'react'
 import { ANCHOS_PROYECTO, PROYECTOS } from '../data/proyectos.js'
 import ImagenResponsiva from './ImagenResponsiva.jsx'
 
-const dosDigitos = (n) => String(n).padStart(2, '0')
-const TOTAL = dosDigitos(PROYECTOS.length)
-
-const foco =
-  'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite focus-visible:ring-2 focus-visible:ring-safety focus-visible:ring-offset-2 focus-visible:ring-offset-graphite'
-
-// Tarjeta de vidrio del hero (solo escritorio). La rotación se pausa con el cursor encima, con foco
+// Tarjeta del hero (solo escritorio). La rotación se pausa con el cursor encima, con foco
 // de teclado dentro, con la pestaña oculta o con el botón; con movimiento reducido no rota.
 export default function TarjetaProyecto() {
   const [activo, setActivo] = useState(0)
@@ -44,6 +38,9 @@ export default function TarjetaProyecto() {
 
   useEffect(() => setFallo(false), [activo])
 
+  // Sin proyectos no hay nada que mostrar.
+  if (!proyecto) return null
+
   const alEnfocar = (e) => {
     let porTeclado = true
     try {
@@ -63,54 +60,58 @@ export default function TarjetaProyecto() {
       onPointerLeave={() => setHover(false)}
       onFocus={alEnfocar}
       onBlur={alDesenfocar}
-      className="w-72 border border-cement bg-graphite/60 p-3 text-white backdrop-blur-md rounded-xl xl:w-80"
+      className="w-72 rounded-3xl bg-white p-3 text-graphite xl:w-80"
     >
-      <a href="#proyectos" aria-label={`Ver proyectos. Proyecto actual: ${proyecto.nombre}`} className={`group block rounded-lg ${foco}`}>
-        <div className="relative aspect-[16/10] overflow-hidden rounded-md bg-cement">
+      <a
+        href="#proyectos"
+        aria-label={`Ver proyectos. Proyecto actual: ${proyecto.nombre}`}
+        className="group block rounded-2xl"
+      >
+        <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-cement">
           {!fallo && (
             <ImagenResponsiva
               key={proyecto.imagen}
               src={proyecto.imagen}
               anchos={ANCHOS_PROYECTO}
-              sizes="17rem"
+              sizes="20rem"
               alt=""
               width="960"
               height="1200"
               loading="lazy"
               onError={() => setFallo(true)}
-              className="size-full object-cover"
+              className="size-full animate-entrada object-cover motion-reduce:animate-none"
             />
           )}
-          <span
-            aria-hidden="true"
-            className="absolute right-2 top-2 bg-graphite/80 px-2 py-0.5 text-sm font-semibold tabular-nums"
-          >
-            {dosDigitos(activo + 1)}/{TOTAL}
-          </span>
         </div>
-        <p className="ancho-semi mt-3 text-lg font-bold leading-tight">{proyecto.nombre}</p>
+        <div className="flex items-baseline justify-between gap-3 px-1 pt-3">
+          <p className="min-w-0 break-words text-lg font-medium leading-tight tracking-[-0.01em]">{proyecto.nombre}</p>
+          <p aria-hidden="true" className="shrink-0 text-sm tabular-nums">
+            {activo + 1} de {PROYECTOS.length}
+          </p>
+        </div>
       </a>
 
-      {!reducido && (
-        <div aria-hidden="true" className="mt-3 h-0.5 w-full overflow-hidden bg-white/20">
-          <div
-            key={activo}
-            onAnimationEnd={() => setActivo((a) => (a + 1) % PROYECTOS.length)}
-            style={{ animationPlayState: enPausa ? 'paused' : 'running' }}
-            className="h-full origin-left animate-progreso-hero bg-safety"
-          />
-        </div>
-      )}
-
-      {!reducido && (
-        <button
-          type="button"
-          onClick={() => setPausaManual((p) => !p)}
-          className={`mt-2 flex min-h-11 items-center text-sm font-semibold underline-offset-4 hover:underline ${foco}`}
-        >
-          {pausaManual ? 'Reanudar' : 'Pausar'}
-        </button>
-      )}
+      <div className="mt-2 flex items-center gap-3 px-1">
+        {!reducido && (
+          <div aria-hidden="true" className="h-1 flex-1 overflow-hidden rounded-full bg-concrete">
+            <div
+              key={activo}
+              onAnimationEnd={() => setActivo((a) => (a + 1) % PROYECTOS.length)}
+              style={{ animationPlayState: enPausa ? 'paused' : 'running' }}
+              className="h-full origin-left animate-progreso-hero rounded-full bg-safety"
+            />
+          </div>
+        )}
+        {!reducido && (
+          <button
+            type="button"
+            onClick={() => setPausaManual((p) => !p)}
+            className="flex min-h-11 items-center rounded-full px-2 text-sm font-semibold underline-offset-4 hover:underline"
+          >
+            {pausaManual ? 'Reanudar' : 'Pausar'}
+          </button>
+        )}
+      </div>
     </div>
   )
 }
