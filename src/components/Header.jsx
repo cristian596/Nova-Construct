@@ -37,6 +37,16 @@ export default function Header() {
   const cerrar = () => setAbierto(false)
 
   return (
+    <>
+    {/* Capa bajo el header (z-40 < z-50): desenfoca el contenido y cierra al hacer clic. Sin soporte de
+        backdrop-filter queda solo el fondo semitransparente, que ya oscurece el contenido. */}
+    {abierto && (
+      <div
+        aria-hidden="true"
+        onClick={cerrar}
+        className="fixed inset-0 z-40 bg-graphite/60 backdrop-blur-sm lg:hidden"
+      />
+    )}
     <header className="fixed inset-x-0 top-0 z-50 bg-concrete">
       <div className={`${contenedor} flex h-16 items-center justify-between gap-3 sm:gap-6`}>
         <a
@@ -106,5 +116,6 @@ export default function Header() {
         </div>
       </nav>
     </header>
+    </>
   )
 }
